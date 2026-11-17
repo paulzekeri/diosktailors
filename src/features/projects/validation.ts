@@ -55,3 +55,21 @@ export function toNewProject(customerId: string, values: ValidProjectForm, measu
     notes: values.notes || undefined,
   };
 }
+
+
+/** Prefill the edit form from a stored project. */
+export function toProjectFormValues(project: {
+  name: string;
+  expectedDeliveryAt: string;
+  description?: string;
+  instructions?: string;
+  notes?: string;
+}): ProjectFormValues {
+  return {
+    name: project.name,
+    expectedDeliveryAt: project.expectedDeliveryAt,
+    description: project.description ?? '',
+    instructions: project.instructions ?? '',
+    notes: project.notes ?? '',
+  };
+}

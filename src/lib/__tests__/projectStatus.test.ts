@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { STATUS_ORDER, actionsFor, canTransition, daysLate, dueBucket, isOverdue, nextStatuses, pillStatus } from '../status';
+import { STATUS_ORDER, actionsFor, canTransition, daysLate, dueBucket, isOverdue, nextStatuses, pillStatus } from '../projectStatus';
 
 /** Every ordered pair, so a future edit to the table cannot quietly open a hole. */
 const ALL = STATUS_ORDER;

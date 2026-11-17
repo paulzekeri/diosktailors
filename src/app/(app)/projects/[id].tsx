@@ -17,7 +17,7 @@ import { repositoryErrorCopy, toRepositoryError } from '@/data';
 import { useCustomer } from '@/features/customers/queries';
 import { useCurrentMeasurement } from '@/features/measurements/queries';
 import { useProject, useSetProjectStatus } from '@/features/projects/queries';
-import { actionsFor, daysLate, isClosed, isOverdue, pillStatus, type StatusAction } from '@/features/projects/status';
+import { actionsFor, daysLate, isClosed, isOverdue, pillStatus, type StatusAction } from '@/lib/projectStatus';
 import { daysUntil, dueLabel, formatLongDate } from '@/lib/date';
 import { formatPhoneDisplay, whatsappUrl } from '@/lib/phone';
 import { colors, layout, radius, spacing } from '@/theme';
@@ -91,17 +91,30 @@ export default function ProjectDetailScreen() {
         ]}
         showsVerticalScrollIndicator={false}
       >
-        <Pressable
-          accessibilityRole="button"
-          accessibilityLabel="Back to projects"
-          onPress={() => router.back()}
-          hitSlop={10}
-          style={styles.back}
-        >
-          <AppText variant="label" weight="semiBold" color={colors.primary}>
-            ← Projects
-          </AppText>
-        </Pressable>
+        <View style={styles.topBar}>
+          <Pressable
+            accessibilityRole="button"
+            accessibilityLabel="Back to projects"
+            onPress={() => router.back()}
+            hitSlop={10}
+            style={styles.back}
+          >
+            <AppText variant="label" weight="semiBold" color={colors.primary}>
+              ← Projects
+            </AppText>
+          </Pressable>
+          <Pressable
+            accessibilityRole="button"
+            accessibilityLabel="Edit this job"
+            onPress={() => router.push(`/projects/${id}/edit` as never)}
+            hitSlop={10}
+            style={styles.back}
+          >
+            <AppText variant="label" weight="semiBold" color={colors.primary}>
+              Edit
+            </AppText>
+          </Pressable>
+        </View>
 
         {project.isLoading ? (
           <View style={styles.loading}>
@@ -278,6 +291,7 @@ export default function ProjectDetailScreen() {
 const styles = StyleSheet.create({
   page: { flex: 1, backgroundColor: colors.canvas },
   content: { paddingHorizontal: layout.gutter, gap: spacing.lg },
+  topBar: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
   back: { minHeight: layout.touchTarget, justifyContent: 'center', alignSelf: 'flex-start' },
   loading: { gap: spacing.lg },
   titleRow: { flexDirection: 'row', alignItems: 'flex-start', gap: spacing.md },

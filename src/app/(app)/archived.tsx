@@ -14,7 +14,7 @@ import { Wash } from '@/components/ui/Wash';
 import { ProjectsIcon } from '@/components/ui/icons';
 import { useCustomers } from '@/features/customers/queries';
 import { useProjects, useSetProjectStatus } from '@/features/projects/queries';
-import { actionsFor } from '@/features/projects/status';
+import { actionsFor } from '@/lib/projectStatus';
 import { formatShortDate } from '@/lib/date';
 import { useDebouncedValue } from '@/lib/useDebouncedValue';
 import { repositoryErrorCopy, toRepositoryError, type Project } from '@/data';

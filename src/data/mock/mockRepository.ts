@@ -1,6 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { daysUntil, nextOccurrence, toISODate } from '@/lib/date';
+import { canTransition } from '@/lib/projectStatus';
 import { matchesCustomerQuery } from '@/lib/search';
 import { RepositoryError, type ProjectFilter, type Repository } from '../repository';
 import type {
@@ -630,6 +631,15 @@ export const mockRepository: Repository = {
       if (index < 0) throw new RepositoryError('not_found');
 
       const current = database.projects[index];
+      if (!canTransition(current.status, status)) {
+        // Same rule the Postgres trigger will enforce in P10: the UI only offers
+        // legal moves, and the data layer refuses anything else.
+        throw new RepositoryError(
+          'invalid_transition',
+          `Cannot move a job from ${current.status} to ${status}.`,
+        );
+      }
+
       const updated: Project = {
         ...current,
         status,

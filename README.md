@@ -39,7 +39,7 @@ Phase status, gate caveats and the next task live in `docs/DIOKS_FashionSuite_De
 | Home dashboard: display-size greeting + presence dot, trial card with **days left**, 4 textured stat tiles, quick actions, deliveries with inline status + view details, celebrations with 1-tap WhatsApp, recent customers | done |
 | Due tab grouped Overdue / Today / This week, overdue numerals | done — read-only until P8 nudges |
 | Customers tab | done (P4): CRUD, soft delete + restore, E.164, duplicate warning |
-| Projects tab + detail | done (P5): five filters, status machine with confirmations, reopen, archive by year. New/edit form: new done, edit + attachments next |
+| Projects tab + detail | done (P5): five filters, status machine enforced in the data layer, new/edit job, reopen, archive by year. Attachments next |
 | Settings: business card, subscription, referral code, sign out | done — editable settings in Phase 7 |
 | Mock repository: auth, business, customers, measurements, templates, projects, reminders, subscription | done — AsyncStorage-persisted, 350–700 ms latency, expiry gate |
 | Component gallery (`/dev/gallery`) | done — used for design review |

@@ -10,10 +10,10 @@
 >
 > | | |
 > |---|---|
-> | **Current phase** | **P5 · Projects + status flow** — ◐ machine · list · detail · new job · archive-by-year + reopen done; edit + attachments pending |
-> | **Built** | P0–P4 (§7.1: P4 ✅) + P5: status machine (6 moves), filtered list, detail, new job, archive by year with reopen (§7.0b) |
+> | **Current phase** | **P5 · Projects + status flow** — ◐ everything except the attachments grid |
+> | **Built** | P0–P4 (§7.1: P4 ✅) + P5: status machine (6 moves, enforced in the mock), list, detail, new + edit job, archive by year with reopen (§7.0b) |
 > | **Runs today** | `cd app && npm start` (Expo web + Expo Go). Mock data, 3 demo accounts |
-> | **Verified** | `npm run typecheck` clean · `npm test` 111/111 · `npm run build:web` exports |
+> | **Verified** | `npm run typecheck` clean · `npm test` 113/113 · `npm run build:web` exports |
 > | **Read next** | §7.1 (per-gate status) → §7.0b (session log + known gaps) → §7.2 P5 |
 >
 > **Rule:** status is ticked in §7.1 and logged in §7.0b **in the same commit that passes a gate**. A new session must be able to resume from this file alone — no memory, no chat history.
@@ -747,6 +747,20 @@ The client approved **every** deferral in `DIOKS_Tailors_MVP_Scope_Deferrals_and
 
 One entry per working session. Facts only: what shipped, what was verified, what the next session should pick up. **Updated in the same commit that changes a gate.**
 
+#### 2026-11-16 (session 9) · P5 third slice — machine enforced in the mock, edit job, shared ProjectForm
+
+**Shipped / verified**
+
+- **The machine moved to `src/lib/projectStatus.ts`** so the data layer can import it without a features→data inversion. Screens, the test file and every import path were updated; no behaviour changed.
+- **The mock now refuses illegal moves** — `projects.setStatus` throws a new `invalid_transition` RepositoryError (`"That status change is not allowed. Pull to refresh and try again."`) when `canTransition(current, next)` is false. This is the rule P10's Postgres trigger will enforce, so a future UI regression now fails at the data layer instead of writing a bad status.
+- **`ProjectForm` extracted** and shared by create and edit: name, delivery date, description, instructions, notes, blur validation, sticky footer, and a slot for a context card above the fields. `new.tsx` dropped to ~130 lines.
+- **Edit job** (screen 27, `(app)/projects/[id]/edit`) — prefilled via `toProjectFormValues` (2 tests, round-trips through the schema), customer shown but **not editable**, status preserved and displayed, save → `Job updated` → back to the detail. Reachable from a new `Edit` action in the detail's top bar.
+- **Deliberate deviation from screen 27's "delete (soft)":** jobs have no `deleted_at` and the `Repository` contract has no project delete — `archived` is the designed end of a job, and the machine is the single place a job retires. The edit screen says so instead of inventing a second delete path. Needs your confirmation either way.
+- **Verified in the browser:** detail → `Edit` → prefilled form (`Adaeze Okafor · status stays in progress`, `Measurements v2 · inches`, `IN PROGRESS`) → renamed to `Ankara jumpsuit (2nd fitting)` → `Save changes` → detail shows the new name with the toast `Job updated` and the status untouched. The new-job form was re-shot after the refactor to prove it still works.
+- `npm run typecheck` clean · `npm test` 113/113 (was 111) · `npm run build:web` exports.
+
+**Remaining in P5:** attachments grid (screen 29 — camera/library via the existing picker, caption, delete). Then P6 templates + compare.
+
 #### 2026-11-16 (session 8) · P5 second slice — reopen decision, new job, archive by year
 
 **Decision taken (client: "proceed" on the recommendation):** `archived → in_progress` is now a **legal transition**, implemented as an explicit "Reopen job" action with its own confirmation. The plan's machine and its tests were updated in the same commit, so the DB trigger in P10 has an exact spec to enforce.
@@ -889,7 +903,7 @@ Direction from the client: **keep the palette**, tighten the UI/UX against the s
 | P2 | Landing + auth (mock) | 4 | Landing, pricing, login, register, forgot/reset, verify — all navigable, no dead ends | ◐ landing + 4 auth screens ✅ · **no pricing block** · **no verify screen** (P11) |
 | P3 | Onboarding + dashboard | 4 | New user reaches a populated demo dashboard in <60s; skeleton/empty/populated states | ◐ onboarding + dashboard ✅ · empty/populated ✅ · **no skeleton loading states** |
 | P4 | Customers + measurements | 6 | Create/read/update/soft-delete customer; 18-field measurement entry; version history with persistence | ✅ **gate met 17 Nov 2026** — create · read · update · soft-delete + restore · 18-field entry · versioned history all verified in-browser. Open (not gate): 500-row perf unmeasured, standalone `[id]/measurements` route deferred to P6 |
-| P5 | Projects + status flow | 5 | Full status machine with confirmations; attachments; archive; overdue derivation | ◐ machine (6 moves, 12 tests) · filtered list · detail · **new job** · archive-by-year + reopen ✅ · **edit project + attachments pending** |
+| P5 | Projects + status flow | 5 | Full status machine with confirmations; attachments; archive; overdue derivation | ◐ machine (6 moves, 12 tests + mock enforcement) · list · detail · new job · edit job · archive-by-year + reopen ✅ · **attachments grid pending** |
 | P6 | Templates + compare | 4 | Editor with reorder/rename/add/delete + validation; compare with deltas and revert | ⬜ not started |
 | P7 | Settings, paywall, referral UI | 4 | Subscription/expiry/referral/export/trash/danger screens with mock states | ⬜ not started |
 | P8 | Due engine + WhatsApp + notifications | 3 | Due list correct across time-travel; WhatsApp preview + deep link; local notification scheduled | ⬜ not started |

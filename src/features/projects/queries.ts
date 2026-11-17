@@ -50,7 +50,7 @@ export function useUpdateProject(id: string) {
   });
 }
 
-/** Status moves go through the machine in `features/projects/status.ts`. */
+/** Status moves go through the machine in `lib/projectStatus.ts`. */
 export function useSetProjectStatus() {
   const client = useQueryClient();
   return useMutation({

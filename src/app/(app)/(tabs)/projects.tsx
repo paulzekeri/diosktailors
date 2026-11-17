@@ -12,7 +12,7 @@ import { ProjectsIcon } from '@/components/ui/icons';
 import { repositoryErrorCopy, toRepositoryError, type ProjectFilter } from '@/data';
 import { useCustomers } from '@/features/customers/queries';
 import { useProjects } from '@/features/projects/queries';
-import { daysLate, isClosed, isOverdue, pillStatus } from '@/features/projects/status';
+import { daysLate, isClosed, isOverdue, pillStatus } from '@/lib/projectStatus';
 import { daysUntil, dueLabel, formatShortDate } from '@/lib/date';
 import { colors, layout, radius, spacing } from '@/theme';
 

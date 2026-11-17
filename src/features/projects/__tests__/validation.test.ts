@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { EMPTY_PROJECT_FORM, toNewProject, validateProjectForm } from '../validation';
+import { EMPTY_PROJECT_FORM, toNewProject, toProjectFormValues, validateProjectForm } from '../validation';
 
 const base = { ...EMPTY_PROJECT_FORM, name: 'Wedding gown', expectedDeliveryAt: '2026-12-01' };
 
@@ -32,6 +32,39 @@ describe('validateProjectForm', () => {
 
   it('caps the free-text fields', () => {
     expect(errorsOf({ ...base, notes: 'x'.repeat(501) }).notes).toBe('Keep notes under 500 characters');
+  });
+});
+
+describe('toProjectFormValues (edit prefill)', () => {
+  it('round-trips a stored project through the schema', () => {
+    const values = toProjectFormValues({
+      name: 'Wedding gown',
+      expectedDeliveryAt: '2026-12-01',
+      description: 'Ivory satin',
+      notes: 'Beading only on the bodice',
+    });
+
+    expect(values.instructions).toBe('');
+
+    const result = validateProjectForm(values);
+    if (!result.success) throw new Error(JSON.stringify(result.errors));
+    expect(result.data).toMatchObject({
+      name: 'Wedding gown',
+      expectedDeliveryAt: '2026-12-01',
+      description: 'Ivory satin',
+      notes: 'Beading only on the bodice',
+    });
+  });
+
+  it('fills blanks for everything optional', () => {
+    const values = toProjectFormValues({ name: 'Kaftan', expectedDeliveryAt: '2026-11-30' });
+    expect(values).toEqual({
+      name: 'Kaftan',
+      expectedDeliveryAt: '2026-11-30',
+      description: '',
+      instructions: '',
+      notes: '',
+    });
   });
 });
 

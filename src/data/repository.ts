@@ -83,6 +83,7 @@ export class RepositoryError extends Error {
       | 'not_found'
       | 'not_authenticated'
       | 'subscription_expired'
+      | 'invalid_transition'
       | 'network'
       | 'unknown',
     message?: string,
@@ -100,6 +101,7 @@ export const repositoryErrorCopy: Record<RepositoryError['code'], string> = {
   not_found: 'We could not find that record. It may have been deleted.',
   not_authenticated: 'Please sign in again to continue.',
   subscription_expired: 'Your subscription has ended. Renew to make changes — your records are safe.',
+  invalid_transition: 'That status change is not allowed. Pull to refresh and try again.',
   network: 'No connection. Your changes are saved and will sync when you are back online.',
   unknown: 'Something went wrong. Please try again.',
 };
