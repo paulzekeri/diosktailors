@@ -18,6 +18,7 @@ import { useCustomer } from '@/features/customers/queries';
 import { useCurrentMeasurement } from '@/features/measurements/queries';
 import { useProject, useSetProjectStatus } from '@/features/projects/queries';
 import { actionsFor, daysLate, isClosed, isOverdue, pillStatus, type StatusAction } from '@/lib/projectStatus';
+import { attachmentCountLabel } from '@/features/projects/attachments';
 import { daysUntil, dueLabel, formatLongDate } from '@/lib/date';
 import { formatPhoneDisplay, whatsappUrl } from '@/lib/phone';
 import { colors, layout, radius, spacing } from '@/theme';
@@ -207,6 +208,27 @@ export default function ProjectDetailScreen() {
               >
                 <AppText variant="caption" weight="semiBold" color={colors.primary}>
                   {measurement.data ? 'View' : 'Measure'}
+                </AppText>
+              </Pressable>
+            </Card>
+
+            <Card style={styles.measureCard}>
+              <View style={styles.measureCopy}>
+                <AppText variant="caption" color={colors.inkMuted}>
+                  Attachments
+                </AppText>
+                <AppText variant="label" weight="semiBold">
+                  {attachmentCountLabel(project.data.attachments.length)}
+                </AppText>
+              </View>
+              <Pressable
+                accessibilityRole="button"
+                accessibilityLabel="Open the job's attachments"
+                onPress={() => router.push(`/projects/${id}/attachments` as never)}
+                hitSlop={8}
+              >
+                <AppText variant="caption" weight="semiBold" color={colors.primary}>
+                  {project.data.attachments.length > 0 ? 'View' : 'Add'}
                 </AppText>
               </Pressable>
             </Card>

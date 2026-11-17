@@ -10,11 +10,11 @@
 >
 > | | |
 > |---|---|
-> | **Current phase** | **P5 · Projects + status flow** — ◐ everything except the attachments grid |
-> | **Built** | P0–P4 (§7.1: P4 ✅) + P5: status machine (6 moves, enforced in the mock), list, detail, new + edit job, archive by year with reopen (§7.0b) |
+> | **Current phase** | **P5 ✅ complete (gate met 17 Nov 2026)** — next: **P6 · Templates + version comparison** |
+> | **Built** | P0–P4 (P4 ✅) + P5 in full: status machine, projects, attachments, archive/reopen (§7.0b) |
 > | **Runs today** | `cd app && npm start` (Expo web + Expo Go). Mock data, 3 demo accounts |
-> | **Verified** | `npm run typecheck` clean · `npm test` 113/113 · `npm run build:web` exports |
-> | **Read next** | §7.1 (per-gate status) → §7.0b (session log + known gaps) → §7.2 P5 |
+> | **Verified** | `npm run typecheck` clean · `npm test` 121/121 · `npm run build:web` exports |
+> | **Read next** | §7.1 (per-gate status) → §7.0b (session log + known gaps) → §7.2 P6 |
 >
 > **Rule:** status is ticked in §7.1 and logged in §7.0b **in the same commit that passes a gate**. A new session must be able to resume from this file alone — no memory, no chat history.
 
@@ -747,6 +747,20 @@ The client approved **every** deferral in `DIOKS_Tailors_MVP_Scope_Deferrals_and
 
 One entry per working session. Facts only: what shipped, what was verified, what the next session should pick up. **Updated in the same commit that changes a gate.**
 
+#### 2026-11-16 (session 10) · P5 closed — attachments grid
+
+**Shipped / verified**
+
+- **Attachments grid** (screen 29, `(app)/projects/[id]/attachments`) — two-column grid of compressed photos with caption bars, `Add photo` (library) and `Take photo` (camera) via the existing `lib/image.ts` picker/compressor, a 12-photo cap, and a per-photo sheet for **caption** and **remove** (remove takes a second confirmation). Empty, loading and error states included; every write goes through `useUpdateProject` so the project cache stays consistent.
+- **`features/projects/attachments.ts` + 8 tests** — sort indices, id generation, trimmed captions (empty → `undefined`), add/remove/caption list maths, count copy and the cap predicate.
+- **Project detail** gained an `Attachments · n` row with View/Add, so the grid is reachable from the job.
+- **Verified in the browser** (attachments injected into the mock DB as data-URI images, since a headless run cannot answer the OS file picker): grid renders `3 attachments` with **3 painted `<img>` elements**; tapping a tile opens the sheet ("Photo · Edit the caption or remove it · Caption · Save caption · Remove photo"); remove + confirm drops the count to `2 attachments` and toasts "Photo removed".
+- `npm run typecheck` clean · `npm test` 121/121 (was 113) · `npm run build:web` exports.
+
+**P5 gate: met.** Full status machine with confirmations, attachments, archive (plus reopen), overdue derivation — all exercised in a browser, and the mock refuses any illegal transition so a future UI regression cannot write a bad status.
+
+**Next session — start here: P6 · Templates + version comparison** (§7.2): templates list, editor (add / rename / reorder / delete with warnings), zod `TemplateV1` validation, live preview; then compare versions with deltas and "revert as new version". `formatDelta` / `changedFieldIds` / `draftFromValues` from `lib/units.ts` and `features/measurements/validation.ts` were built for exactly this and are still unused — wire them here. The standalone `[id]/measurements` route (deferred from P4) is the natural home for history + compare.
+
 #### 2026-11-16 (session 9) · P5 third slice — machine enforced in the mock, edit job, shared ProjectForm
 
 **Shipped / verified**
@@ -903,7 +917,7 @@ Direction from the client: **keep the palette**, tighten the UI/UX against the s
 | P2 | Landing + auth (mock) | 4 | Landing, pricing, login, register, forgot/reset, verify — all navigable, no dead ends | ◐ landing + 4 auth screens ✅ · **no pricing block** · **no verify screen** (P11) |
 | P3 | Onboarding + dashboard | 4 | New user reaches a populated demo dashboard in <60s; skeleton/empty/populated states | ◐ onboarding + dashboard ✅ · empty/populated ✅ · **no skeleton loading states** |
 | P4 | Customers + measurements | 6 | Create/read/update/soft-delete customer; 18-field measurement entry; version history with persistence | ✅ **gate met 17 Nov 2026** — create · read · update · soft-delete + restore · 18-field entry · versioned history all verified in-browser. Open (not gate): 500-row perf unmeasured, standalone `[id]/measurements` route deferred to P6 |
-| P5 | Projects + status flow | 5 | Full status machine with confirmations; attachments; archive; overdue derivation | ◐ machine (6 moves, 12 tests + mock enforcement) · list · detail · new job · edit job · archive-by-year + reopen ✅ · **attachments grid pending** |
+| P5 | Projects + status flow | 5 | Full status machine with confirmations; attachments; archive; overdue derivation | ✅ **gate met 17 Nov 2026** — 6-move machine (12 tests + enforced in the mock), filtered list, detail with confirmations, new/edit job, attachments grid (add/caption/remove), archive by year + reopen, overdue derivation used across home/list/detail. Open (not gate): attachments store local URIs in the mock (P12 swaps to signed URLs), 12-photo cap, project soft-delete deliberately not built (§7.0b session 9) |
 | P6 | Templates + compare | 4 | Editor with reorder/rename/add/delete + validation; compare with deltas and revert | ⬜ not started |
 | P7 | Settings, paywall, referral UI | 4 | Subscription/expiry/referral/export/trash/danger screens with mock states | ⬜ not started |
 | P8 | Due engine + WhatsApp + notifications | 3 | Due list correct across time-travel; WhatsApp preview + deep link; local notification scheduled | ⬜ not started |
@@ -917,7 +931,7 @@ Direction from the client: **keep the palette**, tighten the UI/UX against the s
 | P15 | Export, retention, analytics, QA | 5 | Export + purge + events; full QA matrix; a11y & perf budgets met | ⬜ not started |
 | P16 | PWA release + store packaging + pilot | 5 | Live PWA on domain; EAS builds; store submissions; 3 pilot tailors onboarded | ⬜ not started |
 
-**Legend:** ✅ gate met and proven · ◐ built, gate has the listed gap · ⬜ not started. **P4 is the first phase at `✅`** — its three gate items were each exercised in a browser (§7.0b). P0–P3 remain `◐` with the gaps listed above. Update this table and §7.0b in the same commit that closes a gap.
+**Legend:** ✅ gate met and proven · ◐ built, gate has the listed gap · ⬜ not started. **P4 and P5 are at `✅`** — their gate items were each exercised in a browser (§7.0b). P0–P3 remain `◐` with the gaps listed above. Update this table and §7.0b in the same commit that closes a gap.
 
 **Total:** ≈ **70 working days** to pilot (~14 weeks at 5 days/week, plus review buffer), **73** if the optional referral-credit phase (P13B) is funded. Of that, **P0–P9 = 38 working days (~7.5 weeks)** is the mock front end you want to see and approve first; backend, payments, QA and release are the remaining 32.
 
