@@ -733,7 +733,7 @@ type Reminder = {
 6. **Estimates assume one full-time developer.** Add ~15% for client feedback loops; parallelise design review with build where possible.
 7. **Tick the plan, not your memory.** Phase status lives in the `Status` column of §7.1, and every session appends to §7.0b. The commit that passes a gate flips `⬜` → `✅` — or `◐` when a caveat remains, with the caveat written out. Do not mark `✅` while a gate item is unmet; list the gap instead.
 
-### 7.0a Scope lock — 14 November 2026
+### 7.0a Scope lock — 14 November 2026 (register updated 17 November 2026)
 
 The client approved **every** deferral in `DIOKS_Tailors_MVP_Scope_Deferrals_and_V1.1.md` (33 rows: 26 deferred, 7 dropped) and left all unanswered decisions at their recommended defaults. Consequences for this plan:
 
@@ -741,6 +741,7 @@ The client approved **every** deferral in `DIOKS_Tailors_MVP_Scope_Deferrals_and
 - **D-21** adds the consent columns + `wish_log` to P10 (+0.5 day) — absorbed inside P10's 5-day allowance, so the baseline does not move.
 - **No feature will be added** to the MVP without a written `R` instruction against a register ID; anything raised in review is logged as V1.1 candidate instead.
 - **Only D-03 (price) is still open** — a placeholder of ₦2,500/month is used in copy; the real figure is needed before P13, and it blocks nothing before that.
+- **Register v1.1 (17 Nov 2026):** every decision box is now ticked. **D-22** adds `archived → in_progress` ("Reopen job", confirmed) to the status machine — decided during the P5 build and implemented in the mock UI, so the P10 trigger must allow exactly that one move out of `archived`. **DEF-27** (barcode / QR scanning) is registered as a **proposal only** after it appeared in the client's UI reference: not approved, not built, ~3 days if reinstated.
 
 ### 7.0b Build log — what is actually done (newest first)
 

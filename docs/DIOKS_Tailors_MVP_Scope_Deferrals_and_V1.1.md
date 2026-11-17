@@ -2,8 +2,14 @@
 
 **Product:** DIOKS FashionSuite · **Company:** DIOKS TAILORS
 **Purpose:** a single review sheet listing **everything I removed, reworded, or pushed out of the MVP**, so nothing is lost without your explicit approval.
-**Companions:** `DIOKS_FashionSuite_Design_and_Dev_Plan.md` (v1.0), `prd.txt`, `pcd.txt`, `srf.txt`, `DIOKS_FashionSuite_Master_Build_Spec.md`
-**Version:** 1.0 · **Date:** 14 November 2026
+**Companions:** `DIOKS_FashionSuite_Design_and_Dev_Plan.md` (v1.0), `prd.txt`, `pcd.txt`, `srf.txt`, `DIOKS_FashionSuite_Master_Build_Spec.md` — the plan's **§7.0a** records the same approvals and is read together with this register.
+**Version:** 1.1 · **Date:** 17 November 2026 (v1.0 was 14 November 2026)
+
+> ### v1.1 changelog — 17 Nov 2026
+> - **Every decision box is now ticked** (26 approved DEFER rows · 7 DROP · 9 CHG · 6 SMS decisions), matching the blanket approval recorded below. Previously the boxes were left empty, so a reader could not tell what had been agreed. Boxes stay editable — an `R` still reinstates anything.
+> - **D-22 added:** archived jobs may be **reopened** (`archived → in_progress`). Approved 17 Nov and already implemented in the mock UI; it is now part of the status machine, so P10's Postgres trigger must allow exactly this one move out of `archived`.
+> - **DEF-27 added (proposal, not approved):** barcode / QR scanning, which appeared as a "Scan Barcode" quick action in the 17 Nov UI reference. It is **not** in the approved MVP and is **not** built; the row is registered so it cannot slip in silently.
+> - **Still open:** D-03 (price). Nothing in the app hardcodes ₦2,500 — `formatNaira()` exists, no price copy ships — so it blocks nothing before P13.
 
 > ## ✅ STATUS: APPROVED — 14 NOVEMBER 2026
 > **Client instruction (chat, 14 Nov 2026):** *"Go with your recommendation. The things flagged to move to V1.1 are fine. I did not answer all questions, but let's push them to V1.1."*
@@ -27,47 +33,50 @@ Items marked **CHG** are wording changes only (the PRD currently promises someth
 
 ---
 
-## 1. AT-A-GLANCE REGISTER (33 items: 26 deferred · 7 permanently dropped)
+## 1. AT-A-GLANCE REGISTER (34 items: 27 deferred · 7 permanently dropped)
 
 `Type`: **DEFER** = pushed to V1.1 · **V2** = pushed to a later major version · **DROP** = removed permanently.
 
-> **Decision recorded 14 Nov 2026:** all 33 rows stand **as listed** (approved). The boxes remain in place so you can still change your mind later — a single `R` on any row reinstates it, and §6 tells you exactly what that costs in days.
+> **Decision recorded 14 Nov 2026:** all 33 rows stand **as listed** (approved) — every box below is now ticked `[x] A`. The boxes remain in place so you can still change your mind later — a single `R` on any row reinstates it, and §6 tells you exactly what that costs in days.
+>
+> **Added 17 Nov 2026:** **DEF-27** (barcode / QR scanning) is a **proposal only** — its box is deliberately still empty. It is not in the approved MVP and no code exists for it.
 
 | ID | Item | Type | MVP does instead | Add-back effort | Your decision |
 |---|---|---|---|---|---|
-| DEF-01 | Referral **credit ledger, ₦ payouts, auto-discount at renewal** | DEFER | Referral code + 1-tap WhatsApp invite + "friends joined" counter (no money maths) | 3 days | [ ] A [ ] R [ ] X |
-| DEF-02 | **Google Sign-In** (+ Apple Sign-In if Google ships) | DEFER | Email + password + password reset | 3 days | [ ] A [ ] R [ ] X |
-| DEF-03 | **Server push notifications** (Expo Push) | DEFER | Local notifications on the installed app + in-app "Due" list on web | 4 days | [ ] A [ ] R [ ] X |
-| DEF-04 | **Customer merge / duplicate consolidation** | DEFER | Warn on duplicate phone, with "open existing customer" | 2 days | [ ] A [ ] R [ ] X |
-| DEF-05 | **Dark mode** | DEFER | Light theme only; colour tokens already structured for dark | 1.5 days | [ ] A [ ] R [ ] X |
-| DEF-06 | **Multi-language UI** (Yoruba, Igbo, Hausa, Pidgin, French) | DEFER | English only (`en-NG`) | 4–6 days + translation cost | [ ] A [ ] R [ ] X |
-| DEF-07 | **Voice notes** on projects | DEFER | Photo / reference / WhatsApp-screenshot attachments (schema already allows voice) | 2 days | [ ] A [ ] R [ ] X |
-| DEF-08 | **Realtime multi-device sync** | DEFER | Pull-to-refresh + outbox; data correct, just not live-pushed | 3 days | [ ] A [ ] R [ ] X |
-| DEF-09 | **PDF invoices / receipts / quotes** | DEFER | CSV + JSON export only | 5 days | [ ] A [ ] R [ ] X |
-| DEF-10 | **Business insight charts** (revenue, repeat customers, busiest month) | DEFER | 4 dashboard counters (customers, active jobs, due, completed) | 4 days | [ ] A [ ] R [ ] X |
-| DEF-11 | **Full offline conflict-resolution UI** | DEFER | Last-write-wins with a "changed on another device" warning | 5 days | [ ] A [ ] R [ ] X |
-| DEF-12 | **Bulk / broadcast WhatsApp sending** | DEFER | One customer at a time, human-sent, from the tailor's own number | 4 days + policy risk | [ ] A [ ] R [ ] X |
-| DEF-13 | **SMS gateway** (monthly/occasion wishes by text) | DEFER | 1-tap WhatsApp greeting from the celebrations card | 5–7 days + per-SMS cost | [ ] A [ ] R [ ] X |
-| DEF-14 | **Fully automated celebration messages** (sent with no human tap) | V2 | Assisted: app drafts the message, tailor taps send | 6–8 days + Meta fees | [ ] A [ ] R [ ] X |
-| DEF-15 | **Meta WhatsApp Cloud API** (auto-capture chats, auto-replies) | V2 | `wa.me` deep link; conversations stay in WhatsApp (as the PRD states) | 8–12 days + verification | [ ] A [ ] R [ ] X |
-| DEF-16 | **Promo codes / trial extensions / trial credits** | DEFER | Fixed 14-day trial per account | 2 days | [ ] A [ ] R [ ] X |
-| DEF-17 | **Multi-currency & localised pricing** | DEFER | NGN only, price read from config (never hardcoded) | 3 days | [ ] A [ ] R [ ] X |
-| DEF-18 | **Point-in-time recovery (PITR) backups** | DEFER | Supabase Pro daily backups (7-day retention) + monthly export reminder | 1 day (add-on fee) | [ ] A [ ] R [ ] X |
-| DEF-19 | **Excel (.xlsx) / PDF export** | DEFER | CSV set + JSON per customer (opens in Excel) | 2 days | [ ] A [ ] R [ ] X |
-| DEF-20 | **Staff / apprentice seats with role permissions** | DEFER | One login per business (schema already scoped for multi-user) | 6–8 days | [ ] A [ ] R [ ] X |
-| DEF-21 | **Customer-facing portal / booking link** | DEFER | Customers never install anything; tailor shares via WhatsApp | 8–10 days | [ ] A [ ] R [ ] X |
-| DEF-22 | **Template marketplace / sharing templates between tailors** | DEFER | Each business owns its templates (can duplicate its own) | 5 days | [ ] A [ ] R [ ] X |
-| DEF-23 | **Email notifications** (delivery due, payment failed) | DEFER | In-app + local notifications only | 2 days | [ ] A [ ] R [ ] X |
-| DEF-24 | **International card payments** (Stripe/Paddle) | DEFER | Paystack only (NGN cards, transfer, USSD) | 4 days | [ ] A [ ] R [ ] X |
-| DEF-25 | **Custom branding / white-label for Enterprise tier** | DEFER | DIOKS branding only | 6 days | [ ] A [ ] R [ ] X |
-| DEF-26 | **SMS fallback for customers with no WhatsApp** | DEFER | Tailor taps "call" or sends manually | part of DEF-13 | [ ] A [ ] R [ ] X |
-| DROP-01 | **Desktop / tablet / landscape layouts** | DROP | One 430px phone column, centred frame on large screens | — | [ ] A [ ] X |
-| DROP-02 | **Forcing the WhatsApp *Business* app to open** | DROP | `wa.me` link; the phone OS chooses which WhatsApp opens | — | [ ] A [ ] X |
-| DROP-03 | **Admin ability to read customer measurements/photos** | DROP | Admin sees counts and payments only, never PII | — | [ ] A [ ] X |
-| DROP-04 | **Public photo URLs / unlimited free storage** | DROP | Private buckets + 1-hour signed links + compressed photos | — | [ ] A [ ] X |
-| DROP-05 | **"Login as user" / admin impersonation** | DROP | Support answers questions without seeing private data | — | [ ] A [ ] X |
-| DROP-06 | **Permanent hard delete with no recovery window** | DROP | 30-day Recently Deleted + export, then purge | — | [ ] A [ ] X |
-| DROP-07 | **Unlimited free SMS to customers** | DROP | Paid SMS credits (V1.1) or free WhatsApp | — | [ ] A [ ] X |
+| DEF-01 | Referral **credit ledger, ₦ payouts, auto-discount at renewal** | DEFER | Referral code + 1-tap WhatsApp invite + "friends joined" counter (no money maths) | 3 days | [x] A [ ] R [ ] X |
+| DEF-02 | **Google Sign-In** (+ Apple Sign-In if Google ships) | DEFER | Email + password + password reset | 3 days | [x] A [ ] R [ ] X |
+| DEF-03 | **Server push notifications** (Expo Push) | DEFER | Local notifications on the installed app + in-app "Due" list on web | 4 days | [x] A [ ] R [ ] X |
+| DEF-04 | **Customer merge / duplicate consolidation** | DEFER | Warn on duplicate phone, with "open existing customer" | 2 days | [x] A [ ] R [ ] X |
+| DEF-05 | **Dark mode** | DEFER | Light theme only; colour tokens already structured for dark | 1.5 days | [x] A [ ] R [ ] X |
+| DEF-06 | **Multi-language UI** (Yoruba, Igbo, Hausa, Pidgin, French) | DEFER | English only (`en-NG`) | 4–6 days + translation cost | [x] A [ ] R [ ] X |
+| DEF-07 | **Voice notes** on projects | DEFER | Photo / reference / WhatsApp-screenshot attachments (schema already allows voice) | 2 days | [x] A [ ] R [ ] X |
+| DEF-08 | **Realtime multi-device sync** | DEFER | Pull-to-refresh + outbox; data correct, just not live-pushed | 3 days | [x] A [ ] R [ ] X |
+| DEF-09 | **PDF invoices / receipts / quotes** | DEFER | CSV + JSON export only | 5 days | [x] A [ ] R [ ] X |
+| DEF-10 | **Business insight charts** (revenue, repeat customers, busiest month) | DEFER | 4 dashboard counters (customers, active jobs, due, completed) | 4 days | [x] A [ ] R [ ] X |
+| DEF-11 | **Full offline conflict-resolution UI** | DEFER | Last-write-wins with a "changed on another device" warning | 5 days | [x] A [ ] R [ ] X |
+| DEF-12 | **Bulk / broadcast WhatsApp sending** | DEFER | One customer at a time, human-sent, from the tailor's own number | 4 days + policy risk | [x] A [ ] R [ ] X |
+| DEF-13 | **SMS gateway** (monthly/occasion wishes by text) | DEFER | 1-tap WhatsApp greeting from the celebrations card | 5–7 days + per-SMS cost | [x] A [ ] R [ ] X |
+| DEF-14 | **Fully automated celebration messages** (sent with no human tap) | V2 | Assisted: app drafts the message, tailor taps send | 6–8 days + Meta fees | [x] A [ ] R [ ] X |
+| DEF-15 | **Meta WhatsApp Cloud API** (auto-capture chats, auto-replies) | V2 | `wa.me` deep link; conversations stay in WhatsApp (as the PRD states) | 8–12 days + verification | [x] A [ ] R [ ] X |
+| DEF-16 | **Promo codes / trial extensions / trial credits** | DEFER | Fixed 14-day trial per account | 2 days | [x] A [ ] R [ ] X |
+| DEF-17 | **Multi-currency & localised pricing** | DEFER | NGN only, price read from config (never hardcoded) | 3 days | [x] A [ ] R [ ] X |
+| DEF-18 | **Point-in-time recovery (PITR) backups** | DEFER | Supabase Pro daily backups (7-day retention) + monthly export reminder | 1 day (add-on fee) | [x] A [ ] R [ ] X |
+| DEF-19 | **Excel (.xlsx) / PDF export** | DEFER | CSV set + JSON per customer (opens in Excel) | 2 days | [x] A [ ] R [ ] X |
+| DEF-20 | **Staff / apprentice seats with role permissions** | DEFER | One login per business (schema already scoped for multi-user) | 6–8 days | [x] A [ ] R [ ] X |
+| DEF-21 | **Customer-facing portal / booking link** | DEFER | Customers never install anything; tailor shares via WhatsApp | 8–10 days | [x] A [ ] R [ ] X |
+| DEF-22 | **Template marketplace / sharing templates between tailors** | DEFER | Each business owns its templates (can duplicate its own) | 5 days | [x] A [ ] R [ ] X |
+| DEF-23 | **Email notifications** (delivery due, payment failed) | DEFER | In-app + local notifications only | 2 days | [x] A [ ] R [ ] X |
+| DEF-24 | **International card payments** (Stripe/Paddle) | DEFER | Paystack only (NGN cards, transfer, USSD) | 4 days | [x] A [ ] R [ ] X |
+| DEF-25 | **Custom branding / white-label for Enterprise tier** | DEFER | DIOKS branding only | 6 days | [x] A [ ] R [ ] X |
+| DEF-26 | **SMS fallback for customers with no WhatsApp** | DEFER | Tailor taps "call" or sends manually | part of DEF-13 | [x] A [ ] R [ ] X |
+| DEF-27 | **Barcode / QR scanning** (fabric rolls, order tags) — *proposed, awaiting your call; surfaced in the 17 Nov UI reference* | DEFER | Search by name or phone; no scanning, no camera permission needed | ~3 days | [ ] A [ ] R [ ] X |
+| DROP-01 | **Desktop / tablet / landscape layouts** | DROP | One 430px phone column, centred frame on large screens | — | [x] A [ ] X |
+| DROP-02 | **Forcing the WhatsApp *Business* app to open** | DROP | `wa.me` link; the phone OS chooses which WhatsApp opens | — | [x] A [ ] X |
+| DROP-03 | **Admin ability to read customer measurements/photos** | DROP | Admin sees counts and payments only, never PII | — | [x] A [ ] X |
+| DROP-04 | **Public photo URLs / unlimited free storage** | DROP | Private buckets + 1-hour signed links + compressed photos | — | [x] A [ ] X |
+| DROP-05 | **"Login as user" / admin impersonation** | DROP | Support answers questions without seeing private data | — | [x] A [ ] X |
+| DROP-06 | **Permanent hard delete with no recovery window** | DROP | 30-day Recently Deleted + export, then purge | — | [x] A [ ] X |
+| DROP-07 | **Unlimited free SMS to customers** | DROP | Paid SMS credits (V1.1) or free WhatsApp | — | [x] A [ ] X |
 
 **Important context:** **19 of the 26 deferred items were never in your PRD at all** (referral money, charts, marketplace, portal, white-label, multi-currency, dark mode, translations, voice notes, realtime sync…). Deferring them **protects** the MVP timeline instead of removing promised functionality. §5 lists what is **kept and built**.
 
@@ -226,12 +235,13 @@ Why the log matters commercially: when SMS arrives in V1.1 you will be able to a
 
 | ID | Question | My recommendation | Your call |
 |---|---|---|---|
-| D-16 | Channel priority | WhatsApp in MVP; SMS as a paid add-on in V1.1 | [ ] Agree [ ] Change |
-| D-17 | Cadence | Occasion-based, max 2 relational/customer/year; no monthly blasts | [ ] Agree [ ] Change |
-| D-18 | SMS pricing | Credit packs, e.g. **₦1,000 = 200 SMS** (≈₦5/msg), or bundled into a Professional tier | [ ] Agree [ ] Change |
-| D-19 | SMS sender ID | Start with the aggregator's default/short code; register **DIOKS** or per-tailor brand later (needs CAC documents, 1–4 weeks) | [ ] Agree [ ] Change |
-| D-20 | Consent defaults | Birthday/anniversary wishes **on** when the customer's date is provided; promos **off** until the customer opts in | [ ] Agree [ ] Change |
-| D-21 | Add the consent columns + `wish_log` to the MVP schema | Yes (+0.5 day, avoids a later migration) | [ ] Agree [ ] Skip |
+| D-16 | Channel priority | WhatsApp in MVP; SMS as a paid add-on in V1.1 | [x] Agree [ ] Change |
+| D-17 | Cadence | Occasion-based, max 2 relational/customer/year; no monthly blasts | [x] Agree [ ] Change |
+| D-18 | SMS pricing | Credit packs, e.g. **₦1,000 = 200 SMS** (≈₦5/msg), or bundled into a Professional tier | [x] Agree [ ] Change |
+| D-19 | SMS sender ID | Start with the aggregator's default/short code; register **DIOKS** or per-tailor brand later (needs CAC documents, 1–4 weeks) | [x] Agree [ ] Change |
+| D-20 | Consent defaults | Birthday/anniversary wishes **on** when the customer's date is provided; promos **off** until the customer opts in | [x] Agree [ ] Change |
+| D-21 | Add the consent columns + `wish_log` to the MVP schema | Yes (+0.5 day, avoids a later migration) | [x] Agree [ ] Skip |
+| D-22 | **Reopening an archived job** | Yes — one explicit `archived → in_progress` move, behind a confirmation; archived stays terminal for every other target | [x] Agree [ ] Change (approved 17 Nov 2026) |
 
 **Also worth knowing:** SMS is the only feature here with a **variable cost per action**, so it needs: a spending cap per tailor, a top-up flow, refunds for failed sends, and a monthly reconciliation report. Budget roughly **3–4 extra days** of admin/back-office work in V1.1 beyond the 5–7 days of sending code, or the first month of SMS will be an accounting headache.
 
@@ -247,15 +257,15 @@ These are promises the current PRD makes that are either technically impossible 
 
 | ID | Current PRD wording | Why it must change | Proposed wording | Your call |
 |---|---|---|---|---|
-| CHG-01 | §6.3 "…and, where technically supported and authorized, **automated** celebratory messages" | Automated sending needs the Meta Cloud API, template approval and verified opt-in — a V2 build, and risky for the tailor's number | "…the system shall **assist** the tailor to send a greeting with one tap; fully automated sending is planned for a later release" | [ ] A [ ] R |
-| CHG-02 | §9.2 "Selecting the icon should open the tailor's **WhatsApp Business** application" | Neither iOS nor Android lets an app choose between WhatsApp and WhatsApp Business | "…shall open WhatsApp with a pre-filled message; the operating system decides which installed WhatsApp app handles it" | [ ] A [ ] R |
-| CHG-03 | §10.4 "Subscription expiry shall **restrict access** to the application and its stored business records" | If read access is blocked, the promise "records are never lost" becomes untrue in practice | "…shall block creating and editing while preserving read, export and deletion rights" | [ ] A [ ] R |
-| CHG-04 | §5.1 "Google sign-in **may also be offered**" | Optional in the PRD, but it forces Sign in with Apple on iOS | "Google and Apple sign-in are planned for V1.1" | [ ] A [ ] R |
-| CHG-05 | §7.1 "The application shall provide **an initial standard** measurement template" | One template cannot serve women's, men's and children's tailoring | "…shall provide four seeded starter templates (Women 18 fields, Men 14, Children 10, Blank), each fully editable" | [ ] A [ ] R |
-| CHG-06 | §12 "Administrators shall be able to **manage user accounts**" | Ambiguous enough to imply reading private customer data | "…shall manage subscription status and account suspension; administrators shall have no access to customer records, measurements, photographs or projects" | [ ] A [ ] R |
-| CHG-07 | §8.4 "Delivery dates shall **trigger reminders**" | Reminders are in-app + local device notifications in MVP; server push is V1.1 | "…shall generate in-app reminders and, on installed mobile apps, local notifications; server-sent push is planned for V1.1" | [ ] A [ ] R |
-| CHG-08 | §11.2 "**14-day** free trial" | Keep as is — just confirming | No change | [ ] A [ ] R |
-| CHG-09 | §14 "At least 80% of pilot users can create a project within **10 minutes**" | Keep, but it needs analytics to be provable (added in MVP) | No change to the target; measurement added | [ ] A [ ] R |
+| CHG-01 | §6.3 "…and, where technically supported and authorized, **automated** celebratory messages" | Automated sending needs the Meta Cloud API, template approval and verified opt-in — a V2 build, and risky for the tailor's number | "…the system shall **assist** the tailor to send a greeting with one tap; fully automated sending is planned for a later release" | [x] A [ ] R |
+| CHG-02 | §9.2 "Selecting the icon should open the tailor's **WhatsApp Business** application" | Neither iOS nor Android lets an app choose between WhatsApp and WhatsApp Business | "…shall open WhatsApp with a pre-filled message; the operating system decides which installed WhatsApp app handles it" | [x] A [ ] R |
+| CHG-03 | §10.4 "Subscription expiry shall **restrict access** to the application and its stored business records" | If read access is blocked, the promise "records are never lost" becomes untrue in practice | "…shall block creating and editing while preserving read, export and deletion rights" | [x] A [ ] R |
+| CHG-04 | §5.1 "Google sign-in **may also be offered**" | Optional in the PRD, but it forces Sign in with Apple on iOS | "Google and Apple sign-in are planned for V1.1" | [x] A [ ] R |
+| CHG-05 | §7.1 "The application shall provide **an initial standard** measurement template" | One template cannot serve women's, men's and children's tailoring | "…shall provide four seeded starter templates (Women 18 fields, Men 14, Children 10, Blank), each fully editable" | [x] A [ ] R |
+| CHG-06 | §12 "Administrators shall be able to **manage user accounts**" | Ambiguous enough to imply reading private customer data | "…shall manage subscription status and account suspension; administrators shall have no access to customer records, measurements, photographs or projects" | [x] A [ ] R |
+| CHG-07 | §8.4 "Delivery dates shall **trigger reminders**" | Reminders are in-app + local device notifications in MVP; server push is V1.1 | "…shall generate in-app reminders and, on installed mobile apps, local notifications; server-sent push is planned for V1.1" | [x] A [ ] R |
+| CHG-08 | §11.2 "**14-day** free trial" | Keep as is — just confirming | No change | [x] A [ ] R |
+| CHG-09 | §14 "At least 80% of pilot users can create a project within **10 minutes**" | Keep, but it needs analytics to be provable (added in MVP) | No change to the target; measurement added | [x] A [ ] R |
 
 ---
 
@@ -271,7 +281,7 @@ Every item from PRD §4 (MVP scope) is still built, plus seven hardenings that t
 | Digital measurement book with **customisable** fields | P4, P6 | Four starter templates |
 | Measurement history, versioning and comparison | P4, P6 | New version, never overwrite |
 | Multiple projects per customer with full details | P5 | |
-| Status flow `Pending → In Progress → Completed → Delivered → Archived` | P5 | Completed ≠ Delivered, manual archive |
+| Status flow `Pending → In Progress → Completed → Delivered → Archived`, with **reopen** from archived (D-22) | P5 | Completed ≠ Delivered, manual archive, confirmed reopen |
 | Delivery confirmation prompt + archive reminder | P5, P8 | |
 | Project photos/attachments + captions | P5, P12 | Now a proper table, not an array |
 | Project archiving, with archived items reachable under the customer | P5 | |
@@ -298,6 +308,7 @@ Baseline: **70 working days to pilot** (P0–P16), of which 38 days is the mock 
 | Item | Inserts into | Extra days | New pilot total |
 |---|---|---|---|
 | DEF-05 dark mode | P1 | +1.5 | 71.5 |
+| DEF-27 barcode / QR scan *(proposed)* | P5 | +3 | 73 |
 | DEF-18 PITR backups | ops | +1 | 71 |
 | DEF-04 customer merge | P4 | +2 | 72 |
 | DEF-07 voice notes | P5 | +2 | 72 |
