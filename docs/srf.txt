@@ -1,0 +1,91 @@
+DIOKS FASHIONSUITE
+
+SOFTWARE REQUIREMENTS SPECIFICATION (SRS)
+
+Document Version: 1.0
+Status: Initial Draft
+Product: DIOKS FashionSuite
+Company: DIOKS TAILORS
+Platforms: Android and iOS
+Document Type: Software Requirements Specification
+
+---
+
+SECTION 1: INTRODUCTION
+
+1.1 Purpose
+
+This Software Requirements Specification (SRS) defines the functional and non-functional requirements for the development of DIOKS FashionSuite.
+
+It provides developers, designers, testers and other stakeholders with a clear understanding of the software's expected behavior, features, performance and security requirements.
+
+The document will serve as a technical reference throughout the design, development, testing and deployment of the application.
+
+1.2 Product Scope
+
+DIOKS FashionSuite is a digital fashion business management application designed to help fashion professionals manage customer information, body measurements, project records and business communication.
+
+The initial release (MVP) will focus on:
+
+1. User registration and account management.
+2. Business profile management.
+3. Customer registration and management.
+4. Digital customer measurement records.
+5. Customizable measurement templates.
+6. Customer project management.
+7. Project status tracking and archiving.
+8. WhatsApp Business access.
+9. Secure cloud storage and data recovery.
+10. Subscription and payment management.
+11. Administrative management.
+
+Additional modules, including accounting, inventory management, invoicing and receipts, will be introduced in future development phases.
+
+1.3 Intended Audience
+
+This document is intended for:
+
+- Software developers.
+- UI/UX designers.
+- Software testers.
+- Project managers.
+- System administrators.
+- Business owners.
+- Potential investors and technical partners.
+
+1.4 Product Objectives
+
+The system shall:
+
+1. Provide a reliable digital alternative to physical measurement books.
+2. Allow tailors to maintain individual customer profiles.
+3. Store and retrieve customer measurements securely.
+4. Allow multiple projects under one customer profile.
+5. Maintain project history and status.
+6. Provide convenient WhatsApp Business access.
+7. Support secure account access across multiple devices.
+8. Protect customer information against unauthorized access and accidental loss.
+9. Provide a scalable foundation for future fashion business management features.
+
+1.5 Definitions and Abbreviations
+
+Term| Meaning
+SRS| Software Requirements Specification
+PRD| Product Requirements Document
+MVP| Minimum Viable Product
+UI| User Interface
+UX| User Experience
+API| Application Programming Interface
+Admin| Platform Administrator
+Cloud Storage| Remote storage accessible through the internet
+Customer Profile| Individual record containing customer information
+Measurement Book| Digital collection of customer measurement records
+Project| Individual customer order or tailoring job
+Archive| Storage location for completed and archived projects
+WhatsApp Business| Business communication application
+
+1.6 Product Development Principle
+
+DIOKS FashionSuite shall be developed using a modular and scalable architecture.
+
+The initial release shall prioritize the digital measurement book and customer management functions while allowing future modules to be added without requiring a complete redesign of the application.

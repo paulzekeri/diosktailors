@@ -1,0 +1,347 @@
+DIOKS TAILORS
+PRODUCT REQUIREMENTS DOCUMENT (PRD)
+Product Name: DIOKS FashionSuite
+Document: Product Requirements Document
+Version: 1.0 – Draft
+Date: 31 October 2026
+Product Category: Fashion Business Management Software
+Initial Platforms: Android and iOS
+Document Status: Initial requirements consolidated for review.
+1. PRODUCT OVERVIEW
+1.1 Product Description
+DIOKS FashionSuite is a cloud-based fashion business management application designed to help fashion professionals organize, protect and manage important business information.
+The first version (MVP) will focus primarily on providing a digital measurement book, customer management, customer project records and convenient WhatsApp Business access.
+The long-term vision is to develop a comprehensive management platform serving different sectors of the fashion industry.
+1.2 Problem Statement
+Many fashion professionals depend on physical measurement books, notebooks and mobile-phone notes to store customer information.
+These records can be lost, damaged or misplaced, resulting in the loss of valuable customer measurements and business information.
+DIOKS FashionSuite will provide a secure digital alternative that allows users to store, retrieve and manage their records across devices.
+1.3 Product Vision
+To become a comprehensive digital management platform for the fashion industry.
+2. PRODUCT GOALS AND OBJECTIVES
+The objectives of DIOKS FashionSuite are to:
+Provide a reliable digital measurement book.
+Protect customer measurements and business records from loss.
+Improve customer information management.
+Organize customer projects and job details.
+Support convenient customer communication through WhatsApp Business.
+Allow users to recover their records when changing or losing devices.
+Establish a foundation for a complete fashion business management system.
+3. TARGET USERS
+The platform is intended to accommodate:
+Independent tailors.
+Fashion designers.
+Bespoke fashion businesses.
+Ready-to-wear designers.
+Clothing manufacturers.
+Mass-production businesses.
+School-uniform producers.
+Boutiques and fashion retailers.
+Fashion wholesalers.
+MVP approach: The application should accommodate different categories of fashion businesses, while its first release concentrates on the agreed core measurement-book features.
+4. MVP SCOPE – FIRST RELEASE
+The first release will include:
+User registration and login.
+Business profile creation.
+Digital customer measurement book.
+Customer management.
+Customizable measurement templates.
+Customer photographs and information.
+Customer project management.
+Project photographs and descriptions.
+Project status tracking.
+Delivery notifications and reminders.
+Project archiving.
+WhatsApp Business access.
+Secure cloud storage.
+Account recovery.
+Subscription management.
+Administrative dashboard.
+Additional business-management features will be introduced in future development phases.
+5. USER REGISTRATION AND BUSINESS PROFILE
+5.1 Account Creation
+Users shall be able to:
+Register using an email address.
+Create a username and password.
+Recover forgotten passwords.
+Log in securely.
+Access their accounts from supported devices.
+Google sign-in may also be offered.
+5.2 Business Profile
+Each user shall create a business profile containing:
+Business or brand name.
+Business logo.
+Business phone number.
+WhatsApp number.
+Email address.
+Social media accounts.
+Business address, where applicable.
+Company registration information, where applicable.
+Both registered and unregistered businesses must be accommodated.
+6. CUSTOMER MANAGEMENT
+6.1 Customer List
+The application shall provide a customer list displaying:
+Customer name.
+Customer photograph, where available.
+Phone number.
+Search functionality.
+Add New Customer option.
+6.2 Individual Customer Profile
+Selecting a customer shall open their individual profile.
+The profile shall contain:
+A. Customer Information
+Full name.
+Phone number.
+Email address.
+Photograph.
+Birthday, if provided.
+Wedding anniversary, if provided.
+B. Customer Measurements
+A dedicated section containing the customer's saved measurements.
+C. Customer Projects
+A dedicated section containing the customer's current, pending, completed and archived projects.
+6.3 Customer Celebrations
+Where customers voluntarily provide their birthdays or wedding anniversaries, the system should support reminders and, where technically supported and authorized, automated celebratory messages.
+7. DIGITAL MEASUREMENT BOOK
+7.1 Standard Measurement Template
+The application shall provide an initial standard measurement template.
+7.2 Customizable Measurements
+Users shall be able to:
+Add measurement fields.
+Edit measurement labels.
+Rename measurement terms.
+Remove unnecessary fields.
+Customize the template according to their working methods.
+7.3 Measurement History
+The system should preserve previous measurement versions when measurements are updated.
+Users should be able to retrieve and compare previous measurements.
+7.4 Measurement Retrieval
+Users shall be able to retrieve saved customer measurements whenever the customer returns.
+8. CUSTOMER PROJECT MANAGEMENT
+8.1 Project Creation
+Each customer shall have the ability to own multiple projects.
+A project shall function as a work diary for a particular customer order.
+8.2 Project Information
+Each project shall contain:
+Project name.
+Customer identification.
+Linked customer measurements.
+Design photograph or reference image.
+Job description.
+Customer instructions.
+Special notes.
+Order received date.
+Expected delivery date.
+Collection or delivery date.
+Relevant WhatsApp messages or attachments, where manually saved.
+8.3 Project Status
+Projects shall support distinct statuses, including:
+Pending.
+In Progress.
+Completed.
+Delivered.
+Archived.
+8.4 Project Completion and Delivery
+The tailor shall manually mark a project as completed.
+Completed and delivered must remain separate statuses.
+Marking a project as delivered shall trigger a confirmation prompt.
+After confirmation, the application shall remind the tailor to archive the project.
+Delivery dates shall trigger reminders but shall not automatically archive projects.
+Archived projects shall remain accessible under the customer's profile.
+9. WHATSAPP BUSINESS INTEGRATION
+9.1 WhatsApp Business Requirement
+Every tailor should be encouraged to establish a WhatsApp Business account for professional customer communication and brand promotion.
+9.2 WhatsApp Access
+DIOKS FashionSuite shall provide a clearly visible WhatsApp icon.
+Selecting the icon should open the tailor's WhatsApp Business application.
+9.3 Customer Communication
+Customers may communicate with tailors using either:
+Regular WhatsApp.
+WhatsApp Business.
+Customers shall not be required to install DIOKS FashionSuite.
+9.4 Design Sharing
+Users shall be able to share design photographs and project references directly from FashionSuite to WhatsApp Business.
+9.5 Conversation Storage
+WhatsApp shall remain the primary location for storing WhatsApp conversations.
+Messages shall not automatically be copied into FashionSuite under the initial agreed approach.
+Important messages may be manually saved to the relevant customer project.
+9.6 Future Integration
+Official Meta WhatsApp Business Platform integration may be considered in a future phase if automatic message collection becomes a priority.
+10. SECURITY, CLOUD STORAGE AND DATA PROTECTION
+10.1 Secure Cloud Storage
+All customer records, measurements, photographs, projects and other saved information shall be stored securely in the cloud.
+10.2 Account Recovery
+Users shall be able to recover forgotten passwords and access their information on replacement devices.
+10.3 Data Privacy
+Each tailor shall have a private account.
+One user must not be able to access another user's customer records, measurements or projects.
+10.4 Subscription Expiry
+Subscription expiry shall restrict access to the application and its stored business records.
+Subscription expiry must never automatically delete user data.
+Following successful renewal, access shall be restored with all previous records intact.
+10.5 Data Ownership
+Users shall be able to:
+Delete their own records.
+Export or download their business information.
+Manage their customer records.
+10.6 Backup and Recovery
+The system shall implement secure backup and recovery procedures to protect against accidental data loss and system failure.
+11. SUBSCRIPTION AND PAYMENT MANAGEMENT
+11.1 MVP Subscription Structure
+The MVP shall initially operate with one subscription package.
+All eligible users shall have access to the same agreed core features.
+11.2 Free Trial
+New users shall receive a 14-day free trial.
+11.3 Future Subscription Tiers
+The subscription architecture shall support future packages, including:
+Package
+Proposed Coverage
+Regular
+Measurement book, customer management and WhatsApp access
+Professional
+Regular features plus accounting and transaction records
+Business
+Professional features plus invoicing, receipts and additional business tools
+Enterprise
+Advanced management tools for larger fashion businesses
+These packages will be introduced as their corresponding features become available.
+11.4 Subscription Flexibility
+The system shall support:
+Different subscription prices.
+Different feature permissions.
+Subscription upgrades.
+Subscription downgrades.
+Subscription renewal.
+Payment confirmation.
+11.5 Data Protection During Subscription Changes
+Changes to subscription status must not automatically delete customer information or business records.
+12. ADMINISTRATIVE MANAGEMENT
+The platform shall provide an administrative dashboard.
+Administrators shall be able to:
+Manage user accounts.
+Monitor subscription activities.
+Manage payment records.
+Configure subscription packages.
+Manage free-trial settings.
+Monitor platform activities.
+Handle customer support requests.
+Monitor suspicious activities and platform abuse.
+Administrative access must follow strict permissions.
+Administrators should not have unrestricted access to users' private customer measurements, photographs or project information.
+13. FUTURE DEVELOPMENT ROADMAP
+DIOKS FashionSuite is intended to grow beyond the initial digital measurement book.
+Future modules may include:
+13.1 Basic Accounting
+Recording fabric purchases.
+Recording thread, zips and other material purchases.
+Recording business expenses.
+Tracking financial transactions.
+13.2 Inventory Management
+Stock records.
+Material quantities.
+Stock purchases.
+Stock usage and tracking.
+13.3 Invoicing and Receipts
+Customer invoices.
+Payment records.
+Digital receipts.
+Outstanding balances.
+13.4 Advanced Fashion Business Management
+Staff management.
+Production management.
+Bulk-order management.
+Ready-to-wear management.
+Boutique management.
+Wholesale management.
+These features are future development items and are not part of the initial MVP scope.
+14. MVP SUCCESS CRITERIA
+The first version shall be considered successful when the following objectives are achieved:
+Users can create accounts and business profiles successfully.
+Users can save and retrieve customer measurements.
+Users can retrieve customer information after changing or losing their phones.
+Password and account recovery work successfully.
+Users can customize measurement templates.
+Users can create and manage customer projects.
+Users can share project photographs through WhatsApp Business.
+Project reminders and archiving work as specified.
+Subscription expiry does not result in data deletion.
+Successful subscription renewal restores access to previous records.
+At least three pilot tailors test the application and confirm that it helps reduce the risk of losing measurements compared with physical notebooks.
+At least 80% of pilot users can create a customer project within 10 minutes without assistance.
+15. NON-FUNCTIONAL REQUIREMENTS
+The application shall be designed with the following qualities:
+Cross-platform compatibility: Android and iOS support.
+Security: Protection against unauthorized access.
+Reliability: Consistent storage and retrieval of records.
+Usability: Simple navigation suitable for everyday tailoring work.
+Performance: Responsive screens and efficient data retrieval.
+Scalability: Ability to support increasing numbers of users and future modules.
+Maintainability: Ability to introduce additional features without rebuilding the entire application.
+16. IMPORTANT PRODUCT DECISIONS AND ITEMS TO CONFIRM
+The following decisions have been established or remain open for further review.
+Item
+Current Decision
+Product name
+DIOKS FashionSuite
+Company name
+DIOKS TAILORS
+Initial platforms
+Android and iOS
+MVP focus
+Digital measurement book and agreed core features
+Free trial
+14 days
+MVP subscription
+One package
+Future subscriptions
+Multiple tiers
+Measurement templates
+Standard and customizable
+Customer projects
+Individual project diary per customer
+Project archiving
+Manual, after completion and delivery
+WhatsApp
+WhatsApp Business access from the app
+WhatsApp message storage
+Remains in WhatsApp initially
+Cloud storage
+Required
+Password recovery
+Required
+Subscription expiry
+Access lockout, never automatic data deletion
+User data export
+Required
+User data deletion
+User-controlled
+Admin dashboard
+Required
+Accounting and inventory
+Future modules
+Invoicing and receipts
+Future modules
+Items still requiring detailed decisions
+Exact MVP subscription price.
+Payment methods and payment provider.
+Cloud storage limits and backup frequency.
+Final dashboard layout and screen designs.
+Detailed notification schedule.
+Exact customer data export formats.
+Final WhatsApp Business opening behavior where both WhatsApp applications are installed.
+Detailed administrator permission levels.
+17. CONCLUSION
+DIOKS FashionSuite is designed to address a practical problem within the fashion industry: the loss, disorganization and difficulty of managing valuable customer and business information.
+The initial MVP will establish a secure digital measurement book and customer management system while creating a scalable foundation for a much broader fashion business management platform.
+The product will grow progressively, introducing additional tools and subscription packages as new capabilities become available.
+Product principle: Build the measurement book first. Build the complete fashion business management platform around it.
+What happens after the PRD?
+The PRD is the document that explains what we are building and why. It is not yet the complete technical instruction for developers.
+I recommend this next sequence:
+PRD review and approval: Check that the requirements accurately reflect your vision.
+SRS – Software Requirements Specification: Convert the agreed requirements into detailed instructions that developers can implement and test.
+UI/UX design: Design the actual screens and how users move through the application.
+Database design: Plan how customer records, measurements, projects and other information will be stored.
+Software architecture: Decide how the Android and iOS applications, backend and cloud services will work together.
+Development and testing: Build and test the MVP.
+My recommendation: Before handing this to a developer or investor, we should review and approve the PRD together. That will help prevent misunderstandings, unnecessary development costs and features being built differently from what you intended.

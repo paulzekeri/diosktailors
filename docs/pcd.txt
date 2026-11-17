@@ -1,0 +1,43 @@
+DIOKS FashionSuite
+Product Concept Document (PCD) — Version 1.0
+1. Background and Origin of the Idea
+DIOKS FashionSuite was inspired by a personal experience. As a fashion professional, I used Samsung Notes to record customer measurements, styles, and job descriptions. Whenever my phone got damaged or went missing, I risked losing all those important records.
+This created the idea of a secure digital measurement book where tailors can log in from another device and recover their information, just as they can when they log back into an account on platforms like ChatGPT.
+I also realized that this problem is not unique to me. Many tailors and fashion businesses face similar challenges in storing and managing customer information.
+2. Product Vision
+To develop a secure, reliable, and accessible digital platform for the entire fashion industry, starting with a digital measurement book and gradually expanding into a complete fashion business management system.
+3. Product Purpose
+The purpose of DIOKS FashionSuite is to help tailors and fashion businesses keep their important business information in one secure platform.
+This includes customer measurements, preferred styles, design pictures, job descriptions, project details, and customer communication.
+The goal is to prevent the loss of important business records and make it easier for fashion professionals to manage their customers and work.
+4. Target Users
+The platform is designed for:
+Independent tailors and fashion designers.
+Bespoke fashion businesses.
+Ready-to-wear designers.
+Clothing manufacturers and mass  producers 
+Boutiques and other fashion businesses.
+5. Core Product Concept — Phase 1
+The first version will focus on the digital measurement book, including:
+Secure user accounts and cloud storage.
+Digital customer measurement records.
+Individual customer profiles.
+Customer job descriptions and style details.
+Design pictures and project records.
+Customer communication and WhatsApp integration.
+Access to saved information when changing or replacing a phone.
+The app will support both Android and iPhone users.
+6. Long-Term Product Vision
+Although the product will start as a measurement book, the long-term plan is to develop it into a complete fashion business management platform.
+Future development may include inventory management, sales, production management, bulk orders, boutique management, and wholesale operations.
+7. The Value of the Product
+DIOKS FashionSuite will help fashion professionals:
+Protect important customer information from being lost.
+Keep measurements and job details organized.
+Improve communication with customers.
+Access business records across devices.
+Manage more of their fashion business from one platform.
+8. Product Mission Statement
+To provide the fashion industry with a secure and reliable digital platform that protects valuable business information, improves customer management, and supports the growth of fashion businesses.
+End of Product Concept Document (PCD), Version 1.0.
+This gives us the foundation. The next document will be the Product Requirements Document (PRD), where we will define exactly what the first version must contain and how its features should work.

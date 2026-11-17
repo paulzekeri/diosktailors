@@ -1,56 +1,88 @@
-# Welcome to your Expo app 👋
+# DIOKS FashionSuite — app
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Phone-first Expo (SDK 58) app. One codebase → web PWA, iOS and Android.
 
-## Get started
+Planning docs are versioned in [`docs/`](docs/): **`docs/DIOKS_FashionSuite_Design_and_Dev_Plan.md`** carries the live build status (header box, §7.1 per-phase ticks, §7.0b session log) — read that first when picking the project up. Scope/deferrals: `docs/DIOKS_Tailors_MVP_Scope_Deferrals_and_V1.1.md`. Raw briefs: `docs/prd.txt`, `docs/srf.txt`, `docs/pcd.txt`.
 
-1. Install dependencies
-
-   ```bash
-   npm install
-   ```
-
-2. Start the app
-
-   ```bash
-   npx expo start
-   ```
-
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **src/app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
+## Run it
 
 ```bash
-npm run reset-project
+npm install
+npm start          # Expo dev server — press w for web, or scan the QR with Expo Go
+npm run web        # web only
+npm run typecheck  # tsc --noEmit
+npm test           # vitest (pure logic: dates, auth validation)
+npm run build:web  # production SPA export into dist/
 ```
 
-This command will move the starter code to the **example** directory and create a blank **src/app** directory where you can start developing.
+On a real phone: `npm start`, then scan the QR code (same Wi-Fi).
 
-### Other setup steps
+> **Typed routes gotcha:** after adding or renaming a route file, run `npm start` once — Expo regenerates `.expo/types/router.d.ts`. Until then `npm run typecheck` reports valid new paths as type errors.
 
-- To set up ESLint for linting, run `npx expo lint`, or follow our guide on ["Using ESLint and Prettier"](https://docs.expo.dev/guides/using-eslint/)
-- If you'd like to set up unit testing, follow our guide on ["Unit Testing with Jest"](https://docs.expo.dev/develop/unit-testing/)
-- Learn more about the TypeScript setup in this template in our guide on ["Using TypeScript"](https://docs.expo.dev/guides/typescript/)
+## What exists today (P0–P3, mock data)
 
-## Learn more
+Phase status, gate caveats and the next task live in `docs/DIOKS_FashionSuite_Design_and_Dev_Plan.md` (§7.1 + §7.0b). Summary: **next is P4 — Customers + measurements**.
 
-To learn more about developing your project with Expo, look at the following resources:
+| Area | State |
+|---|---|
+| Expo SDK 58 project, TypeScript strict, `@/*` alias | done |
+| `app.json`: SPA output (`web.output: "single"`), scheme `dioksfashionsuite`, bundle IDs | done |
+| Design tokens (`src/theme/tokens.ts`) — colour, type, spacing, radius, elevation (e0–e3 + ambient/brand/focus/top depth), ambience washes, motion | done |
+| Phone shell `AppFrame` — 430px max, centred frame on desktop, full-bleed on phones, backdrop glow | done |
+| Components: `AppText`, `Button`, `Card`, `StatusPill`, `Avatar`, `Screen`, `Wash`, `BrandMark`, `TextField`, `Checkbox`, `Stepper` | done |
+| Landing screen (`src/app/(public)/index.tsx`) | done (Phase 1) |
+| Auth: login / register / forgot / reset (`src/app/(auth)`) | done — Phase 2, mock accounts |
+| Session provider + guards (`(app)/_layout.tsx`, `(onboarding)/_layout.tsx`) | done |
+| Onboarding: welcome → business → unit/template → referral → done | done — creates the profile, seeds the chosen template, starts the 14-day trial |
+| Logo upload with client-side compression (`expo-image-manipulator`, 512px / 70%) | done |
+| 5-tab shell: Home · Customers · Projects · Due · Settings (5 inline SVG icons, ~2 KB) | done |
+| Home dashboard: 4 stats, trial banner, deliveries this week, celebrations with 1-tap WhatsApp, recent customers | done |
+| Due tab grouped Overdue / Today / This week | done — read-only |
+| Customers & Projects tabs | read-only previews — full CRUD in Phases 4–5 |
+| Settings: business card, subscription, referral code, sign out | done — editable settings in Phase 7 |
+| Mock repository: auth, business, customers, measurements, templates, projects, reminders, subscription | done — AsyncStorage-persisted, 350–700 ms latency, expiry gate |
+| Component gallery (`/dev/gallery`) | done — used for design review |
+| PWA manifest, icons, `_redirects`, `vercel.json` | done |
+| Email verification screen | Phase 11 (needs real Supabase email confirmation) |
+| Customer / measurement / project screens | Phase 4–6 |
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+## Demo accounts (mock data)
 
-## Join the community
+Password for all three: `demo1234`
 
-Join our community of developers creating universal apps.
+| Email | What it shows |
+|---|---|
+| `adaeze@dioks.app` | Active studio, 9-day trial, 6 customers, 8 projects, 2 measurement versions |
+| `expired@dioks.app` | Expired subscription — writes are rejected by the repository (read-only demo) |
+| `new@dioks.app` | No business profile yet — run the full onboarding flow (business → unit/template → referral → done) |
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+After onboarding, the dashboard shows the seeded studio data; a brand-new signup starts with empty states instead.
+
+
+Reset the demo data at any time from a dev build with `resetMockDatabase()` (`src/data/mock/mockRepository.ts`).
+
+
+## Structure
+
+```
+src/
+  app/            # expo-router routes: (public), (auth), (app), (admin), dev
+  components/
+    layout/       # AppFrame, Screen
+    ui/           # AppText, Button, Card, StatusPill, Avatar, Wash, BrandMark, …
+  theme/          # tokens.ts (single source of truth)
+public/           # index.html template, manifest, icons, _redirects
+```
+
+## Non-negotiables (from the plan)
+
+- Content never exceeds **430px**; no desktop layout exists.
+- No hard-coded colours — add a token in `src/theme/tokens.ts`.
+- Touch targets ≥44px, contrast ≥4.5:1, text scales to 130%.
+- Screens never call Supabase directly: `screen → hook → repository → mock | supabase`.
+- Every list needs loading, empty, error and offline states.
+
+## Deployment
+
+- **Vercel**: build `npm run build:web`, output `dist` (rewrites in `vercel.json`).
+- **Cloudflare Pages**: same build, output `dist` (`public/_redirects` handles the SPA fallback).
