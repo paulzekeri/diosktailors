@@ -1,5 +1,5 @@
 import { useRouter } from 'expo-router';
-import type { ReactNode } from 'react';
+import { useState, type ReactNode } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 
 import { Screen } from '@/components/layout/Screen';
@@ -8,10 +8,18 @@ import { Avatar } from '@/components/ui/Avatar';
 import { BrandMark } from '@/components/ui/BrandMark';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
+import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
+import { EmptyState } from '@/components/ui/EmptyState';
+import { SearchField } from '@/components/ui/SearchField';
+import { SegmentedTabs } from '@/components/ui/SegmentedTabs';
+import { Sheet } from '@/components/ui/Sheet';
+import { Skeleton, SkeletonRow, SkeletonText } from '@/components/ui/Skeleton';
 import { StatusPill } from '@/components/ui/StatusPill';
 import { Stepper } from '@/components/ui/Stepper';
 import { TextField } from '@/components/ui/TextField';
+import { useToast } from '@/components/ui/Toast';
 import { Wash } from '@/components/ui/Wash';
+import { CustomersIcon } from '@/components/ui/icons';
 import { colors, radius, spacing, statusTheme, typography, type ProjectStatus, type TextVariant } from '@/theme';
 
 const SWATCHES = [
@@ -47,6 +55,11 @@ function Section({ title, children }: { title: string; children: ReactNode }) {
 
 export default function GalleryScreen() {
   const router = useRouter();
+  const toast = useToast();
+  const [segment, setSegment] = useState<'measurements' | 'projects' | 'details'>('measurements');
+  const [search, setSearch] = useState('');
+  const [sheetOpen, setSheetOpen] = useState(false);
+  const [confirmOpen, setConfirmOpen] = useState(false);
 
   return (
     <Screen>
@@ -174,6 +187,73 @@ export default function GalleryScreen() {
         <TextField label="Password" placeholder="Your password" error="Passwords do not match" />
       </Section>
 
+      <Section title="Loading skeletons">
+        <Skeleton width={140} height={12} />
+        <SkeletonText lines={3} />
+        <SkeletonRow />
+        <AppText variant="caption" color={colors.inkSubtle}>
+          Never spin for more than 400 ms without one of these.
+        </AppText>
+      </Section>
+
+      <Section title="Segmented tabs">
+        <SegmentedTabs
+          accessibilityLabel="Customer sections"
+          value={segment}
+          onChange={setSegment}
+          options={[
+            { value: 'measurements', label: 'Measurements', count: 6 },
+            { value: 'projects', label: 'Projects', count: 3 },
+            { value: 'details', label: 'Details' },
+          ]}
+        />
+        <AppText variant="caption" color={colors.inkSubtle}>
+          Active segment: <AppText variant="caption" weight="semiBold">{segment}</AppText>
+        </AppText>
+      </Section>
+
+      <Section title="Search">
+        <SearchField
+          value={search}
+          onChangeText={setSearch}
+          placeholder="Name or phone number"
+          accessibilityLabel="Search customers"
+        />
+      </Section>
+
+      <Section title="Empty and error states">
+        <EmptyState
+          icon={<CustomersIcon size={26} color={colors.primary} />}
+          title="No customers yet"
+          description="Add your first customer and their measurements stay on file forever."
+          actionLabel="Add customer"
+          onAction={() => undefined}
+        />
+        <EmptyState
+          tone="error"
+          title="Could not load customers"
+          description="Your records are safe. Check your connection and try again."
+          actionLabel="Try again"
+          onAction={() => undefined}
+        />
+      </Section>
+
+      <Section title="Toast and sheets">
+        <Button
+          label="Show toast"
+          variant="secondary"
+          onPress={() =>
+            toast.show({
+              message: 'Saved as v3 · v2 kept in history',
+              actionLabel: 'Undo',
+              onAction: () => undefined,
+            })
+          }
+        />
+        <Button label="Open sheet" variant="secondary" onPress={() => setSheetOpen(true)} />
+        <Button label="Confirm delivery" variant="secondary" onPress={() => setConfirmOpen(true)} />
+      </Section>
+
       <Section title="Progress">
         <Stepper step={2} />
         <Stepper step={4} />
@@ -184,6 +264,35 @@ export default function GalleryScreen() {
           Phase 1 gate: verified at 320 / 360 / 390 / 430 / 768 / 1280 · no horizontal overflow · 44px targets
         </AppText>
       </ScrollView>
+
+      <Sheet
+        visible={sheetOpen}
+        onClose={() => setSheetOpen(false)}
+        title="New measurement"
+        subtitle="Version 3 · 18 fields"
+        footer={<Button label="Save new version" onPress={() => setSheetOpen(false)} />}
+      >
+        <AppText variant="body" color={colors.inkMuted}>
+          Create flows open as modals with a close affordance and an unsaved-changes guard.
+        </AppText>
+      </Sheet>
+
+      <ConfirmDialog
+        visible={confirmOpen}
+        title="Mark as delivered?"
+        message="This does not archive the job. Archive when you have handed it over."
+        confirmLabel="Mark delivered"
+        onConfirm={() => {
+          setConfirmOpen(false);
+          toast.show({
+            message: 'Delivered. Archive when you’ve handed it over.',
+            actionLabel: 'Archive',
+            onAction: () => undefined,
+            tone: 'success',
+          });
+        }}
+        onCancel={() => setConfirmOpen(false)}
+      />
     </Screen>
   );
 }

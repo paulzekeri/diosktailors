@@ -78,3 +78,29 @@ export function SettingsIcon(props: IconProps) {
     </Svg>
   );
 }
+export function SearchIcon(props: IconProps) {
+  return (
+    <Svg {...base(props)}>
+      <Circle cx="11" cy="11" r="7" />
+      <Path d="m20 20-3.6-3.6" />
+    </Svg>
+  );
+}
+
+export function CloseIcon(props: IconProps) {
+  return (
+    <Svg {...base(props)}>
+      <Path d="M18 6 6 18" />
+      <Path d="m6 6 12 12" />
+    </Svg>
+  );
+}
+
+export function CheckIcon(props: IconProps) {
+  return (
+    <Svg {...base(props)}>
+      <Path d="m20 6-11 11-5-5" />
+    </Svg>
+  );
+}
+

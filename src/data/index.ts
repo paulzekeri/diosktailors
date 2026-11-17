@@ -2,6 +2,7 @@ import type { Repository } from './repository';
 import { mockRepository } from './mock/mockRepository';
 
 export * from './types';
+export * from './queryKeys';
 export { STANDARD_TEMPLATES } from './templates';
 export type { StarterTemplateKey } from './templates';
 export { RepositoryError, repositoryErrorCopy, toRepositoryError } from './repository';

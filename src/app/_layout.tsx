@@ -14,6 +14,7 @@ import { StyleSheet, View } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import { AppFrame } from '@/components/layout/AppFrame';
+import { ToastProvider } from '@/components/ui/Toast';
 import { AuthProvider } from '@/features/auth/AuthProvider';
 import { colors } from '@/theme';
 
@@ -52,14 +53,16 @@ export default function RootLayout() {
         <AuthProvider>
           <View style={styles.root}>
             <AppFrame>
-              <StatusBar style="dark" />
-              <Stack
-                screenOptions={{
-                  headerShown: false,
-                  contentStyle: { backgroundColor: colors.canvas },
-                  animation: 'slide_from_right',
-                }}
-              />
+              <ToastProvider>
+                <StatusBar style="dark" />
+                <Stack
+                  screenOptions={{
+                    headerShown: false,
+                    contentStyle: { backgroundColor: colors.canvas },
+                    animation: 'slide_from_right',
+                  }}
+                />
+              </ToastProvider>
             </AppFrame>
           </View>
         </AuthProvider>

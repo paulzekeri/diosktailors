@@ -10,10 +10,10 @@
 >
 > | | |
 > |---|---|
-> | **Current phase** | **P4 · Customers + measurements** — not started (next) |
-> | **Built** | P0–P3, with the caveats listed in §7.1 — nothing is signed off |
+> | **Current phase** | **P4 · Customers + measurements** — ◐ foundations done, **screens not started** |
+> | **Built** | P0–P3 (caveats in §7.1) + P4 foundations (§7.0b) — nothing is signed off |
 > | **Runs today** | `cd app && npm start` (Expo web + Expo Go). Mock data, 3 demo accounts |
-> | **Verified** | `npm run typecheck` clean · `npm test` 29/29 · `npm run build:web` exports |
+> | **Verified** | `npm run typecheck` clean · `npm test` 73/73 · `npm run build:web` exports |
 > | **Read next** | §7.1 (per-gate status) → §7.0b (session log + known gaps) → §7.2 P4 |
 >
 > **Rule:** status is ticked in §7.1 and logged in §7.0b **in the same commit that passes a gate**. A new session must be able to resume from this file alone — no memory, no chat history.
@@ -746,6 +746,22 @@ The client approved **every** deferral in `DIOKS_Tailors_MVP_Scope_Deferrals_and
 
 One entry per working session. Facts only: what shipped, what was verified, what the next session should pick up. **Updated in the same commit that changes a gate.**
 
+#### 2026-11-16 (session 2) · P4 foundations — units, schemas, data hooks, UI primitives
+
+**Shipped / verified**
+
+- **`src/lib/units.ts`** + 17 tests: inches↔cm (`2.54`), eighth-inch rounding, fraction reduce/format (`32.5 → 32 1/2`), `parseMeasurement` for `32`, `32,5`, `32 1/2`, `32-1/2`, `32½`, `1/2`, `81 cm`, `32"` (rejects `321/2`), body-plausible bounds (0.5–120 in / 1–300 cm), compare deltas.
+- **Validation (first use of `zod`, already a dependency):** `src/lib/forms.ts` (`FieldErrors`, `zodFieldErrors`, `firstErrorField`), `features/customers/validation.ts` (customer form → `NewCustomer`, E.164 normalisation, duplicate-phone guard, past-date rules), `features/measurements/validation.ts` (per-field parse/range, `filled of total`, required-missing count, draft ↔ unit conversion, `changedFieldIds`, `draftFromValues`). 27 tests.
+- **Data hooks** (`screen → hook → repository`, ending the direct `repo.*` calls): `src/data/queryKeys.ts` + `features/customers/queries.ts` (list/detail/deleted/create/update/softDelete/restore/customerProjects) and `features/measurements/queries.ts` (versions/current/saveVersion/setCurrent/templates), with scoped invalidation.
+- **Six UI primitives:** `Skeleton` (+ `SkeletonText`, `SkeletonRow`, `SkeletonList`), `Toast` (+ `ToastProvider` wired in `src/app/_layout.tsx`, action slot, live region), `SegmentedTabs` (44px, `role="tablist"`), `SearchField` (+ `useDebouncedValue` for the 250 ms search), `EmptyState`, `Sheet` + `ConfirmDialog`. Three new SVG icons (`Search`, `Close`, `Check`) — the icon set stays ~3 KB.
+- **`vitest.config.ts`** adds the `@/*` → `src/*` alias so tests import the same specifiers as app code.
+- Component gallery extended with all of the above, including a working toast and sheet.
+- `npm run typecheck` clean · `npm test` 73/73 (was 29) · `npm run build:web` exports · visually verified in Chrome at 430×932 with 2× screenshots (skeleton, segmented tabs, search, empty/error states, toast, sheet).
+
+**Fixed during review:** `SegmentedTabs` clipped its count (`Measurements · …`) — the same `numberOfLines` + flex-shrink trap as the tab bar. The count is now a separate caption node and the segment padding is tighter.
+
+**Next session — start here.** The six P4 routes (§5 screens 15, 19–24), in dependency order: upgrade `(tabs)/customers` (A–Z sections, debounced search, active-job counts, loading/empty/no-results/error) → `(app)/customers/new` (modal, `Sheet`/stack `presentation: 'modal'`) → `(app)/customers/[id]` profile with `SegmentedTabs` → `[id]/edit` (soft delete + `ConfirmDialog`) → `[id]/measurements` (version list) → `[id]/measurements/new` (hero screen: grouped fields, fraction chips, ghosts, progress, unit toggle, sticky save, drafts). Compare screen stays in P6. Run `npm start` once after adding routes so `.expo/types/router.d.ts` regenerates before `npm run typecheck`.
+
 #### 2026-11-16 · P0–P3 audited against their gates; tab-bar label clipping fixed
 
 **Shipped / verified**
@@ -777,7 +793,7 @@ One entry per working session. Facts only: what shipped, what was verified, what
 | P1 | Design system & shell | 3 | `theme.ts`, 24 shared components, `AppFrame`, component gallery route; 430px contract verified on 5 viewports | ◐ tokens · `AppFrame` · gallery ✅ · **11 of 24 components** · 430px verified at 360 / 430 / 1440 |
 | P2 | Landing + auth (mock) | 4 | Landing, pricing, login, register, forgot/reset, verify — all navigable, no dead ends | ◐ landing + 4 auth screens ✅ · **no pricing block** · **no verify screen** (P11) |
 | P3 | Onboarding + dashboard | 4 | New user reaches a populated demo dashboard in <60s; skeleton/empty/populated states | ◐ onboarding + dashboard ✅ · empty/populated ✅ · **no skeleton loading states** |
-| P4 | Customers + measurements | 6 | Create/read/update/soft-delete customer; 18-field measurement entry; version history with persistence | ⬜ **NEXT** — data layer ready, no screens yet |
+| P4 | Customers + measurements | 6 | Create/read/update/soft-delete customer; 18-field measurement entry; version history with persistence | ◐ foundations done (units · zod schemas · data hooks · 6 UI primitives) · **no screens yet** |
 | P5 | Projects + status flow | 5 | Full status machine with confirmations; attachments; archive; overdue derivation | ⬜ not started |
 | P6 | Templates + compare | 4 | Editor with reorder/rename/add/delete + validation; compare with deltas and revert | ⬜ not started |
 | P7 | Settings, paywall, referral UI | 4 | Subscription/expiry/referral/export/trash/danger screens with mock states | ⬜ not started |

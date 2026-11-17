@@ -21,7 +21,7 @@ On a real phone: `npm start`, then scan the QR code (same Wi-Fi).
 
 ## What exists today (P0–P3, mock data)
 
-Phase status, gate caveats and the next task live in `docs/DIOKS_FashionSuite_Design_and_Dev_Plan.md` (§7.1 + §7.0b). Summary: **next is P4 — Customers + measurements**.
+Phase status, gate caveats and the next task live in `docs/DIOKS_FashionSuite_Design_and_Dev_Plan.md` (§7.1 + §7.0b). Summary: **P4 is under way — foundations (units, zod schemas, data hooks, UI primitives) are in; the six customer/measurement screens are next.**
 
 | Area | State |
 |---|---|
