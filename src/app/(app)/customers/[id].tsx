@@ -225,6 +225,20 @@ export default function CustomerProfileScreen() {
                           </View>
                         ))}
                     </View>
+
+                    {(versions.data?.length ?? 0) > 1 ? (
+                      <Pressable
+                        accessibilityRole="button"
+                        accessibilityLabel="Compare versions"
+                        onPress={() => router.push(`/customers/${id}/measurements/compare` as never)}
+                        hitSlop={8}
+                        style={styles.compareLink}
+                      >
+                        <AppText variant="caption" weight="semiBold" color={colors.primary}>
+                          Compare with the previous version
+                        </AppText>
+                      </Pressable>
+                    ) : null}
                   </Card>
 
                   {(versions.data?.length ?? 0) > 1 ? (
@@ -233,16 +247,24 @@ export default function CustomerProfileScreen() {
                       {versions.data
                         ?.filter((version) => !version.isCurrent)
                         .map((version) => (
-                          <Card key={version.id} style={styles.versionRow}>
+                          <Card
+                            key={version.id}
+                            style={styles.versionRow}
+                            onPress={() =>
+                              router.push(`/customers/${id}/measurements/compare?from=${version.version}` as never)
+                            }
+                            accessibilityLabel={`Compare version ${version.version} with the current one`}
+                          >
                             <View style={styles.versionCopy}>
                               <AppText variant="label">Version {version.version}</AppText>
                               <AppText variant="caption" color={colors.inkMuted}>
                                 {formatShortDate(version.recordedAt)} ·{' '}
-                                {Object.values(version.data).filter((value) => typeof value === 'number').length} fields
+                                {Object.values(version.data).filter((value) => typeof value === 'number').length} fields ·{' '}
+                                {version.unit === 'inches' ? 'in' : 'cm'}
                               </AppText>
                             </View>
-                            <AppText variant="caption" color={colors.inkSubtle}>
-                              {version.unit === 'inches' ? 'in' : 'cm'}
+                            <AppText variant="caption" weight="semiBold" color={colors.primary}>
+                              Compare
                             </AppText>
                           </Card>
                         ))}
@@ -331,5 +353,6 @@ const styles = StyleSheet.create({
   valueCell: { width: '50%', gap: 2, paddingRight: spacing.sm },
   versionRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.md },
   versionCopy: { flex: 1, gap: spacing.xxs },
+  compareLink: { paddingTop: spacing.sm },
   detailRow: { gap: 2, paddingVertical: spacing.xs },
 });

@@ -10,10 +10,10 @@
 >
 > | | |
 > |---|---|
-> | **Current phase** | **P5 ✅ complete (gate met 17 Nov 2026)** — next: **P6 · Templates + version comparison** |
-> | **Built** | P0–P4 (P4 ✅) + P5 in full: status machine, projects, attachments, archive/reopen (§7.0b) |
+> | **Current phase** | **P6 · Templates + compare** — ◐ compare + revert done; **templates list + editor next** |
+> | **Built** | P0–P5 (P4, P5 ✅) + P6: version compare with deltas, changed-only filter, revert-as-new-version (§7.0b) |
 > | **Runs today** | `cd app && npm start` (Expo web + Expo Go). Mock data, 3 demo accounts |
-> | **Verified** | `npm run typecheck` clean · `npm test` 121/121 · `npm run build:web` exports |
+> | **Verified** | `npm run typecheck` clean · `npm test` 130/130 · `npm run build:web` exports |
 > | **Read next** | §7.1 (per-gate status) → §7.0b (session log + known gaps) → §7.2 P6 |
 >
 > **Rule:** status is ticked in §7.1 and logged in §7.0b **in the same commit that passes a gate**. A new session must be able to resume from this file alone — no memory, no chat history.
@@ -747,6 +747,19 @@ The client approved **every** deferral in `DIOKS_Tailors_MVP_Scope_Deferrals_and
 
 One entry per working session. Facts only: what shipped, what was verified, what the next session should pick up. **Updated in the same commit that changes a gate.**
 
+#### 2026-11-16 (session 11) · P6 first slice — version compare and revert
+
+**Shipped / verified**
+
+- **`features/measurements/compare.ts` + 9 tests** — `compareVersions` normalises **both** versions into one display unit before diffing, so a value recorded in inches and later in cm compares honestly (86.36 cm ≈ 34 in → `+1.5`, not `+54.36`). Each row carries `note: changed | same | new | removed | missing`, so a cleared field reports *cleared* instead of a fake delta. Plus `compareSummary`, `summaryLabel` ("2 changed · 1 new") and `changedRows`.
+- **Compare screen** (screen 24, `(app)/customers/[id]/measurements/compare`) — `?from=&to=` version params (defaults: previous → current), header `v1 (19 Jul) → v2 (4 Nov)`, a **Changed only** toggle, rows showing `31" → 32 1/2"` with `↑ +1 1/2` (the fraction formatter earning its keep), and a **Revert to v1** action behind a confirmation.
+- **Revert is non-destructive by construction** — it calls `saveVersion` with the old values and unit, so history grows instead of changing: the confirm copy says exactly that, and the toast reads `v1 restored as v3 · nothing was overwritten`.
+- **Profile wiring** — the current-version card gained "Compare with the previous version"; each history row is now tappable and opens a comparison of that version against the current one.
+- **Verified in the browser:** `v1 → v2` showed `2 changed`, changed-only gave Waist `31" → 32 1/2" ↑ +1 1/2` and Hip `40" → 41" ↑ +1`; turning the toggle off listed all 18 fields with `0` for the unchanged ones; `Revert to v1` → confirm → profile now reads **Version 3 · current** with Waist `31"` and the next action `New measurement · v4`, proving v1's values were saved as a new version and v2 stayed in history.
+- `npm run typecheck` clean · `npm test` 130/130 (was 121) · `npm run build:web` exports.
+
+**Remaining in P6:** the templates list and editor (screens 31/32) — add / rename / reorder / delete a field, zod `TemplateV1` validation, live preview, and a warning before deleting a field that has values in saved measurements. The stable-field-key rule (rename must not orphan history) is already how `templates.ts` is built, so the tests for it only need the editor.
+
 #### 2026-11-16 (session 10) · P5 closed — attachments grid
 
 **Shipped / verified**
@@ -918,7 +931,7 @@ Direction from the client: **keep the palette**, tighten the UI/UX against the s
 | P3 | Onboarding + dashboard | 4 | New user reaches a populated demo dashboard in <60s; skeleton/empty/populated states | ◐ onboarding + dashboard ✅ · empty/populated ✅ · **no skeleton loading states** |
 | P4 | Customers + measurements | 6 | Create/read/update/soft-delete customer; 18-field measurement entry; version history with persistence | ✅ **gate met 17 Nov 2026** — create · read · update · soft-delete + restore · 18-field entry · versioned history all verified in-browser. Open (not gate): 500-row perf unmeasured, standalone `[id]/measurements` route deferred to P6 |
 | P5 | Projects + status flow | 5 | Full status machine with confirmations; attachments; archive; overdue derivation | ✅ **gate met 17 Nov 2026** — 6-move machine (12 tests + enforced in the mock), filtered list, detail with confirmations, new/edit job, attachments grid (add/caption/remove), archive by year + reopen, overdue derivation used across home/list/detail. Open (not gate): attachments store local URIs in the mock (P12 swaps to signed URLs), 12-photo cap, project soft-delete deliberately not built (§7.0b session 9) |
-| P6 | Templates + compare | 4 | Editor with reorder/rename/add/delete + validation; compare with deltas and revert | ⬜ not started |
+| P6 | Templates + compare | 4 | Editor with reorder/rename/add/delete + validation; compare with deltas and revert | ◐ **compare + revert done** (9 tests, unit-aware) · templates list/editor pending |
 | P7 | Settings, paywall, referral UI | 4 | Subscription/expiry/referral/export/trash/danger screens with mock states | ⬜ not started |
 | P8 | Due engine + WhatsApp + notifications | 3 | Due list correct across time-travel; WhatsApp preview + deep link; local notification scheduled | ⬜ not started |
 | P9 | **Polish + DEMO + client sign-off** | 3 | All 44 screens reviewed on iPhone + Android; **written sign-off** recorded; design freeze | ⬜ not started |
