@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
 import {
+  addFraction,
   convert,
   formatDelta,
   formatFraction,
@@ -141,3 +142,29 @@ describe('bounds and deltas', () => {
     expect(formatDelta(0, 'cm')).toBe('0');
   });
 });
+
+describe('addFraction (fraction chips)', () => {
+  it('appends the fraction to the whole number already typed', () => {
+    expect(addFraction('32', 1, 2)).toBe('32 1/2');
+    expect(addFraction('32 ', 3, 8)).toBe('32 3/8');
+  });
+
+  it('replaces an existing fraction instead of stacking it', () => {
+    expect(addFraction('32 1/4', 1, 2)).toBe('32 1/2');
+    expect(addFraction('32 7/8', 1, 8)).toBe('32 1/8');
+  });
+
+  it('drops a typed decimal in favour of the chip', () => {
+    expect(addFraction('32.5', 1, 4)).toBe('32 1/4');
+  });
+
+  it('works with nothing typed yet', () => {
+    expect(addFraction('', 1, 2)).toBe('1/2');
+    expect(addFraction('abc', 3, 4)).toBe('3/4');
+  });
+
+  it('round-trips through parseMeasurement', () => {
+    expect(parseMeasurement(addFraction('31', 7, 8))).toBe(31.875);
+  });
+});
+

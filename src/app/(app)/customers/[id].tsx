@@ -5,6 +5,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { AppText } from '@/components/ui/AppText';
 import { Avatar } from '@/components/ui/Avatar';
+import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { SegmentedTabs } from '@/components/ui/SegmentedTabs';
@@ -159,10 +160,16 @@ export default function CustomerProfileScreen() {
               ) : !current ? (
                 <EmptyState
                   title="No measurements yet"
-                  description="Measurement entry lands in the next build step. Saved versions will appear here with every field and its history."
+                  description="Record the first set — every version is kept, so re-measuring never loses the old numbers."
+                  actionLabel="Take measurements"
+                  onAction={() => router.push(`/customers/${id}/measurements/new` as never)}
                 />
               ) : (
                 <View style={styles.section}>
+                  <Button
+                    label={`New measurement · v${current.version + 1}`}
+                    onPress={() => router.push(`/customers/${id}/measurements/new` as never)}
+                  />
                   <Card tone="brand" style={styles.currentCard}>
                     <AppText variant="label">Version {current.version} · current</AppText>
                     <AppText variant="caption" color={colors.inkMuted}>

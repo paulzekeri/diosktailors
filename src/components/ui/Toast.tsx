@@ -98,7 +98,8 @@ export function ToastProvider({ children, bottomOffset }: { children: ReactNode;
   useEffect(() => clearTimer, [clearTimer]);
 
   const api = useMemo(() => ({ show, hide }), [show, hide]);
-  const offset = bottomOffset ?? layout.tabBarHeight + spacing.md;
+  /** Clears the 64px tab bar and a ~110px sticky form footer, so a toast never hides a primary action. */
+  const offset = bottomOffset ?? layout.tabBarHeight + spacing.huge;
 
   return (
     <ToastContext.Provider value={api}>

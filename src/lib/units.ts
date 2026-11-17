@@ -170,3 +170,26 @@ export function formatDelta(diff: number, unit: Unit): string {
   const magnitude = formatMeasurementValue(Math.abs(rounded), unit);
   return `${rounded > 0 ? '+' : '−'}${magnitude}`;
 }
+
+/** Chips under the active field. Tap to replace the fraction part of the value. */
+export const FRACTION_CHIPS: ReadonlyArray<{ label: string; numerator: number; denominator: number }> = [
+  { label: '⅛', numerator: 1, denominator: 8 },
+  { label: '¼', numerator: 1, denominator: 4 },
+  { label: '⅜', numerator: 3, denominator: 8 },
+  { label: '½', numerator: 1, denominator: 2 },
+  { label: '⅝', numerator: 5, denominator: 8 },
+  { label: '¾', numerator: 3, denominator: 4 },
+  { label: '⅞', numerator: 7, denominator: 8 },
+];
+
+/**
+ * Applies a fraction chip to whatever the tailor has typed so far:
+ * `32` + ½ → `32 1/2`, `32 1/4` + ½ → `32 1/2`, `''` + ½ → `1/2`,
+ * `32.5` + ¼ → `32 1/4` (the decimal is dropped, not stacked).
+ */
+export function addFraction(value: string, numerator: number, denominator: number): string {
+  const fraction = `${numerator}/${denominator}`;
+  const whole = value.match(/^\s*(\d+)/)?.[1];
+  return whole ? `${whole} ${fraction}` : fraction;
+}
+

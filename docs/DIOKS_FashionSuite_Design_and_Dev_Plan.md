@@ -10,10 +10,10 @@
 >
 > | | |
 > |---|---|
-> | **Current phase** | **P4 · Customers + measurements** — ◐ list · new · profile done; edit + measurement screens next |
-> | **Built** | P0–P3 (caveats in §7.1) + P4 foundations and screens 15/19/20 (§7.0b) — nothing is signed off |
+> | **Current phase** | **P4 · Customers + measurements** — ◐ entry screen done; edit/soft-delete remaining |
+> | **Built** | P0–P3 (caveats in §7.1) + P4 foundations, screens 15/19/20 and the hero entry screen (§7.0b) |
 > | **Runs today** | `cd app && npm start` (Expo web + Expo Go). Mock data, 3 demo accounts |
-> | **Verified** | `npm run typecheck` clean · `npm test` 84/84 · `npm run build:web` exports |
+> | **Verified** | `npm run typecheck` clean · `npm test` 89/89 · `npm run build:web` exports |
 > | **Read next** | §7.1 (per-gate status) → §7.0b (session log + known gaps) → §7.2 P4 |
 >
 > **Rule:** status is ticked in §7.1 and logged in §7.0b **in the same commit that passes a gate**. A new session must be able to resume from this file alone — no memory, no chat history.
@@ -746,6 +746,20 @@ The client approved **every** deferral in `DIOKS_Tailors_MVP_Scope_Deferrals_and
 
 One entry per working session. Facts only: what shipped, what was verified, what the next session should pick up. **Updated in the same commit that changes a gate.**
 
+#### 2026-11-16 (session 4) · P4 hero screen — measurement entry (screen 23)
+
+**Shipped / verified**
+
+- **`(app)/customers/[id]/measurements/new.tsx`** — grouped fields (Upper body / Lower body / Lengths), a live `n of 18 filled` counter with a progress bar, in|cm toggle that **re-expresses** what is already typed (`convertDraft`), grey last-value ghosts with tap-to-fill, sticky `Save version N` + `Save draft`, scroll-to-first-invalid, values saved in template order, version label `Measurement v3 · v2 is current`.
+- **`MeasurementInput`** — label, decimal input with unit suffix, ghost chip (`last 32 1/2"`), and eighths chips (⅛ ¼ ⅜ ½ ⅝ ¾ ⅞) shown **only while that field is focused**, so 18 rows stay compact. `addFraction` in `lib/units.ts` replaces the fraction instead of stacking it (`32 1/4` + ½ → `32 1/2`), with 5 tests.
+- **Local drafts** — `features/measurements/draftStore.ts` (AsyncStorage, one per customer, 600 ms autosave, cleared when a version is saved, "Draft restored from this device" hint). A corrupt or missing draft never throws.
+- **Toast fix found by screenshot:** the toast was covering the sticky `Save version 3` button. Default offset raised to `tabBarHeight + 40`, which clears both the tab bar and a ~110px form footer.
+- Profile now links here (`New measurement · vN`, or `Take measurements` when empty).
+- **End-to-end verified in Chrome:** profile → open entry → typed `14`, tapped ½ → `14 1/2`; saving incomplete highlighted the 5 required fields and showed "Fill 5 required fields"; completing them saved **v3**, flipped v2 into history, cleared the draft and returned to the profile with the green `Saved as v3 · v2 kept in history` toast. Re-opening the form showed the restored draft.
+- `npm run typecheck` clean · `npm test` 89/89 (was 84) · `npm run build:web` exports.
+
+**Remaining in P4:** `[id]/edit` (prefilled form, soft delete behind `ConfirmDialog`, restore from the deleted list) and a dedicated `[id]/measurements` history screen — the profile lists versions already, but compare (P6) needs its own route.
+
 #### 2026-11-16 (session 3) · P4 screens 15, 19, 20 — customers list, new customer, profile
 
 **Shipped / verified**
@@ -806,7 +820,7 @@ One entry per working session. Facts only: what shipped, what was verified, what
 | P1 | Design system & shell | 3 | `theme.ts`, 24 shared components, `AppFrame`, component gallery route; 430px contract verified on 5 viewports | ◐ tokens · `AppFrame` · gallery ✅ · **11 of 24 components** · 430px verified at 360 / 430 / 1440 |
 | P2 | Landing + auth (mock) | 4 | Landing, pricing, login, register, forgot/reset, verify — all navigable, no dead ends | ◐ landing + 4 auth screens ✅ · **no pricing block** · **no verify screen** (P11) |
 | P3 | Onboarding + dashboard | 4 | New user reaches a populated demo dashboard in <60s; skeleton/empty/populated states | ◐ onboarding + dashboard ✅ · empty/populated ✅ · **no skeleton loading states** |
-| P4 | Customers + measurements | 6 | Create/read/update/soft-delete customer; 18-field measurement entry; version history with persistence | ◐ screens 15 · 19 · 20 done (list, new, profile) · **edit + measurement entry next** |
+| P4 | Customers + measurements | 6 | Create/read/update/soft-delete customer; 18-field measurement entry; version history with persistence | ◐ create · read · entry · history done · **update (edit) + soft delete remaining** |
 | P5 | Projects + status flow | 5 | Full status machine with confirmations; attachments; archive; overdue derivation | ⬜ not started |
 | P6 | Templates + compare | 4 | Editor with reorder/rename/add/delete + validation; compare with deltas and revert | ⬜ not started |
 | P7 | Settings, paywall, referral UI | 4 | Subscription/expiry/referral/export/trash/danger screens with mock states | ⬜ not started |
