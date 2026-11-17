@@ -17,6 +17,16 @@ const KIND_LABEL: Record<Reminder['kind'], string> = {
   anniversary: 'Anniversary',
 };
 
+/** Birthdays and anniversaries carry the customer's name as the project name — never print it twice. */
+function dueTitle(item: Reminder): string {
+  return item.projectName && item.projectName !== item.customerName ? item.projectName : item.customerName;
+}
+
+function dueSubtitle(item: Reminder): string {
+  const kind = KIND_LABEL[item.kind];
+  return item.projectName && item.projectName !== item.customerName ? `${item.customerName} · ${kind}` : kind;
+}
+
 export default function DueScreen() {
   const router = useRouter();
   const [reminders, setReminders] = useState<Reminder[]>([]);
@@ -71,10 +81,10 @@ export default function DueScreen() {
             ) : null}
             <View style={styles.rowCopy}>
               <AppText variant="label" numberOfLines={1}>
-                {item.projectName ?? item.customerName}
+                {dueTitle(item)}
               </AppText>
               <AppText variant="caption" color={colors.inkMuted} numberOfLines={1}>
-                {item.customerName} · {KIND_LABEL[item.kind]}
+                {dueSubtitle(item)}
               </AppText>
               <View style={styles.meta}>
                 <AppText variant="caption" color={item.daysUntil < 0 ? colors.danger : colors.inkMuted}>

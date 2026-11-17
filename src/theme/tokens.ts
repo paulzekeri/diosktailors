@@ -62,18 +62,15 @@ export const colors = {
 export type ColorToken = keyof typeof colors;
 
 /**
- * Bottom tab bar — a floating deep-wine bar with a lighter active pill
- * (reference polish pass, 17 Nov). Kept out of `colors` because it is a surface
- * *system*, not a colour: text/icon tints travel with the background.
+ * Bottom tab bar — deep wine surface, lighter active pill, cream tints.
+ * Docked flush to the phone frame: the frame's own `overflow: hidden` + 28px
+ * radius is what rounds the bar's bottom corners, so no radius is set here.
  */
 export const tabBarTheme = {
   background: colors.primaryDeep,
   activePill: colors.primary,
   activeTint: colors.canvas,
   inactiveTint: 'rgba(251, 249, 246, 0.66)',
-  radius: 22,
-  edge: 12,
-  lift: 10,
 } as const;
 
 /** Fine diagonal weave for paper-like surfaces. Very low contrast on purpose. */

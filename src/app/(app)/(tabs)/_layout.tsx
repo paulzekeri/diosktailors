@@ -21,27 +21,22 @@ export default function TabsLayout() {
         tabBarActiveTintColor: tabBarTheme.activeTint,
         tabBarInactiveTintColor: tabBarTheme.inactiveTint,
         /**
-         * Floating deep-wine bar (reference polish, 17 Nov). It is absolutely
-         * positioned, so screens keep reserving `layout.tabBarHeight` at the
-         * bottom — the bar sits inside that reserved space.
+         * Docked deep-wine bar (client direction, 17 Nov): flush to the sides and
+         * bottom of the phone frame, with the frame's 28px radius rounding the
+         * bottom corners. Screens reserve exactly this height at the bottom.
          *
          * Height budget inside the 64px bar: 64 − 4 − 4 = 56 row, minus
          * react-navigation's own 2×5 item padding = 46 content for a 28px icon
-         * slot + ~15px label. Every extra pixel of padding here shrinks the
-         * label (it is a flex child with `numberOfLines={1}` → overflow hidden).
+         * slot + ~13px label. Every extra pixel of padding here shrinks the label
+         * (it is a flex child with `numberOfLines={1}` → overflow hidden).
          */
         tabBarStyle: {
-          position: 'absolute',
-          left: tabBarTheme.edge,
-          right: tabBarTheme.edge,
-          bottom: tabBarTheme.lift + insets.bottom,
-          height: layout.tabBarHeight,
+          height: layout.tabBarHeight + insets.bottom,
           paddingTop: 4,
-          paddingBottom: 4,
+          paddingBottom: Math.max(insets.bottom, 6),
           backgroundColor: tabBarTheme.background,
-          borderRadius: tabBarTheme.radius,
           borderTopWidth: 0,
-          ...shadows.e3,
+          ...shadows.top,
         },
         tabBarLabelStyle: { fontFamily: fontFamily.semiBold, fontSize: 10, letterSpacing: 0 },
       }}
