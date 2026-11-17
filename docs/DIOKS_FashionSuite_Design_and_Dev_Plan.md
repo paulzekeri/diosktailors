@@ -10,10 +10,10 @@
 >
 > | | |
 > |---|---|
-> | **Current phase** | **P4 ✅ complete (gate met 17 Nov 2026)** — next: **P5 · Projects + status flow** |
-> | **Built** | P0–P3 (caveats in §7.1) + P4 in full (§7.0b) — nothing is signed off yet |
+> | **Current phase** | **P5 · Projects + status flow** — ◐ state machine · projects list · project detail done; new/edit/attachments pending |
+> | **Built** | P0–P4 (§7.1: P4 ✅) + P5 first slice: status machine, filtered projects list, detail with the full transition chain (§7.0b) |
 > | **Runs today** | `cd app && npm start` (Expo web + Expo Go). Mock data, 3 demo accounts |
-> | **Verified** | `npm run typecheck` clean · `npm test` 92/92 · `npm run build:web` exports |
+> | **Verified** | `npm run typecheck` clean · `npm test` 104/104 · `npm run build:web` exports |
 > | **Read next** | §7.1 (per-gate status) → §7.0b (session log + known gaps) → §7.2 P5 |
 >
 > **Rule:** status is ticked in §7.1 and logged in §7.0b **in the same commit that passes a gate**. A new session must be able to resume from this file alone — no memory, no chat history.
@@ -746,6 +746,25 @@ The client approved **every** deferral in `DIOKS_Tailors_MVP_Scope_Deferrals_and
 
 One entry per working session. Facts only: what shipped, what was verified, what the next session should pick up. **Updated in the same commit that changes a gate.**
 
+#### 2026-11-16 (session 7) · P5 first slice — status machine, projects list, project detail
+
+**Shipped / verified**
+
+- **`features/projects/status.ts` + 12 tests** — the machine as data: 5 legal moves out of 25 pairs (the test asserts **every** pair, so a future edit cannot quietly open a hole), `actionsFor(status)` carrying the button copy + confirmation consequence + success toast, rework marked secondary, archived terminal. Plus `dueBucket` / `isOverdue` / `daysLate` / `pillStatus`, and closed jobs are never overdue.
+- **Project hooks** — `useProject`, `useCreateProject`, `useUpdateProject`, `useSetProjectStatus`; every mutation invalidates the project lists *and* the customer cache so the customers tab's "N active jobs" badge cannot go stale.
+- **Projects tab** (screen 16) — five filters (Active · All · Completed · Delivered · Archived), rows with status pill, danger accent when late, "3 days late" copy and "View details", plus skeleton / error / per-filter empty states. The list never mutates, so a mis-tap cannot change a job's state.
+- **Project detail** (screens 26 + 28) — headline + pill, expected-delivery card (texture, danger accent when late), customer strip with WhatsApp, measurement version with View/Measure, description / instructions / notes, and a primary action that comes *only* from the machine. `Mark delivered` and `Archive job` open `ConfirmDialog`; after delivering, the toast carries an `Archive` action that opens the archive confirmation.
+- **Verified in the browser:** `Wedding gown` walked `in_progress → completed → delivered → archived`, with the pills, the "Completed · deliver when it is collected" toast and the green "Delivered. Archive when you've handed it over." toast with its Archive shortcut. A DOM probe confirmed the archived detail renders no actions and reads `Collected 7 Nov 2026`.
+
+**Fixed during review**
+
+- Closed jobs still said "Overdue by 41 days" in the list and "Overdue by 11 days" on the detail. Closed rows now read `Closed 7 Oct`, and the detail reads `Collected 7 Nov 2026`.
+- The archive confirmation looked like it did nothing on the first scripted run — the click had landed on the page's underlying button (same label) rather than the dialog's. Re-probed against the dialog element: the transition applies. Worth remembering for future UI tests: RN Web modals do not block synthetic events.
+
+- `npm run typecheck` clean · `npm test` 104/104 (was 92) · `npm run build:web` exports.
+
+**Remaining in P5:** new project (screen 25: name, linked measurement version, expected delivery, description/instructions/notes, photos, defaults to `pending`), edit (27), attachments grid (29), and the archived screen with year grouping + reopen (30). **Decision needed before 30:** the machine has no `archived →` arrow, so "reopen" needs either a new legal transition (and a matching DB trigger) or a restore-from-archive action — do not invent one in the UI.
+
 #### 2026-11-16 (session 6) · UI/UX polish pass — reference-inspired shell and dashboard
 
 Direction from the client: **keep the palette**, tighten the UI/UX against the supplied reference. Explicit correction recorded: the trial shows a **days count, never a percentage bar**.
@@ -853,7 +872,7 @@ Direction from the client: **keep the palette**, tighten the UI/UX against the s
 | P2 | Landing + auth (mock) | 4 | Landing, pricing, login, register, forgot/reset, verify — all navigable, no dead ends | ◐ landing + 4 auth screens ✅ · **no pricing block** · **no verify screen** (P11) |
 | P3 | Onboarding + dashboard | 4 | New user reaches a populated demo dashboard in <60s; skeleton/empty/populated states | ◐ onboarding + dashboard ✅ · empty/populated ✅ · **no skeleton loading states** |
 | P4 | Customers + measurements | 6 | Create/read/update/soft-delete customer; 18-field measurement entry; version history with persistence | ✅ **gate met 17 Nov 2026** — create · read · update · soft-delete + restore · 18-field entry · versioned history all verified in-browser. Open (not gate): 500-row perf unmeasured, standalone `[id]/measurements` route deferred to P6 |
-| P5 | Projects + status flow | 5 | Full status machine with confirmations; attachments; archive; overdue derivation | ⬜ not started |
+| P5 | Projects + status flow | 5 | Full status machine with confirmations; attachments; archive; overdue derivation | ◐ machine (12 tests) · filtered list · detail with every transition ✅ · **new/edit project, attachments, archived screen pending** |
 | P6 | Templates + compare | 4 | Editor with reorder/rename/add/delete + validation; compare with deltas and revert | ⬜ not started |
 | P7 | Settings, paywall, referral UI | 4 | Subscription/expiry/referral/export/trash/danger screens with mock states | ⬜ not started |
 | P8 | Due engine + WhatsApp + notifications | 3 | Due list correct across time-travel; WhatsApp preview + deep link; local notification scheduled | ⬜ not started |
