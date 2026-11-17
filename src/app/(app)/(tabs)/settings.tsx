@@ -14,7 +14,6 @@ import { formatPhoneDisplay } from '@/lib/phone';
 import { colors, layout, radius, shadows, spacing } from '@/theme';
 
 const UPCOMING = [
-  { label: 'Measurement templates', phase: 'Phase 6' },
   { label: 'Business profile & logo', phase: 'Phase 7' },
   { label: 'Preferences & notifications', phase: 'Phase 7' },
   { label: 'Subscription & billing', phase: 'Phase 7' },
@@ -90,6 +89,17 @@ export default function SettingsScreen() {
       </Card>
 
       <View style={styles.list}>
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel="Measurement templates"
+          onPress={() => router.push('/templates' as never)}
+          style={styles.row}
+        >
+          <AppText variant="body">Measurement templates</AppText>
+          <AppText variant="caption" weight="semiBold" color={colors.primary}>
+            Edit
+          </AppText>
+        </Pressable>
         {UPCOMING.map((item) => (
           <Pressable
             key={item.label}

@@ -5,7 +5,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 import { repo, RepositoryError, type NewMeasurement } from '@/data';
-import { customerKeys, templateKeys } from '@/data/queryKeys';
+import { customerKeys } from '@/data/queryKeys';
 
 export function useMeasurementVersions(customerId: string | undefined) {
   return useQuery({
@@ -49,9 +49,4 @@ export function useSetCurrentMeasurement(customerId: string) {
       void client.invalidateQueries({ queryKey: customerKeys.measurements(customerId) });
     },
   });
-}
-
-/** Field definitions for the entry form (18 fields for the standard templates). */
-export function useTemplates() {
-  return useQuery({ queryKey: templateKeys.list(), queryFn: () => repo.templates.list() });
 }

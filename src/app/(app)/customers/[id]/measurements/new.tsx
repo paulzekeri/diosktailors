@@ -23,7 +23,8 @@ import { Wash } from '@/components/ui/Wash';
 import { repositoryErrorCopy, toRepositoryError, type TemplateField, type Unit } from '@/data';
 import { useCustomer } from '@/features/customers/queries';
 import { clearDraft, loadDraft, saveDraft } from '@/features/measurements/draftStore';
-import { useCurrentMeasurement, useSaveMeasurementVersion, useTemplates } from '@/features/measurements/queries';
+import { useCurrentMeasurement, useSaveMeasurementVersion } from '@/features/measurements/queries';
+import { useTemplates } from '@/features/templates/queries';
 import {
   convertDraft,
   draftFromValues,

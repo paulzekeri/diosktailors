@@ -87,6 +87,16 @@ export function SearchIcon(props: IconProps) {
   );
 }
 
+export function TemplatesIcon(props: IconProps) {
+  return (
+    <Svg {...base(props)}>
+      <Path d="M4 5h16a1 1 0 0 1 1 1v4H3V6a1 1 0 0 1 1-1Z" />
+      <Path d="M3 10v8a1 1 0 0 0 1 1h6V10" />
+      <Path d="M14 10v9h6a1 1 0 0 0 1-1v-8" />
+    </Svg>
+  );
+}
+
 export function CloseIcon(props: IconProps) {
   return (
     <Svg {...base(props)}>

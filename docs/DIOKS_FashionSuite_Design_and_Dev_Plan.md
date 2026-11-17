@@ -10,11 +10,11 @@
 >
 > | | |
 > |---|---|
-> | **Current phase** | **P6 · Templates + compare** — ◐ compare + revert done; **templates list + editor next** |
-> | **Built** | P0–P5 (P4, P5 ✅) + P6: version compare with deltas, changed-only filter, revert-as-new-version (§7.0b) |
+> | **Current phase** | **P6 ✅ complete (gate met 17 Nov 2026)** — next: **P7 · Settings, paywall, referral & export UI** |
+> | **Built** | P0–P6 (P4, P5, P6 ✅) — mock front end covers customers, measurements, projects, compare and templates |
 > | **Runs today** | `cd app && npm start` (Expo web + Expo Go). Mock data, 3 demo accounts |
-> | **Verified** | `npm run typecheck` clean · `npm test` 134/134 · `npm run build:web` exports |
-> | **Read next** | §7.1 (per-gate status) → §7.0b (session log + known gaps) → §7.2 P6 |
+> | **Verified** | `npm run typecheck` clean · `npm test` 153/153 · `npm run build:web` exports |
+> | **Read next** | §7.1 (per-gate status) → §7.0b (session log + known gaps) → §7.2 P7 |
 >
 > **Rule:** status is ticked in §7.1 and logged in §7.0b **in the same commit that passes a gate**. A new session must be able to resume from this file alone — no memory, no chat history.
 
@@ -747,6 +747,23 @@ The client approved **every** deferral in `DIOKS_Tailors_MVP_Scope_Deferrals_and
 
 One entry per working session. Facts only: what shipped, what was verified, what the next session should pick up. **Updated in the same commit that changes a gate.**
 
+#### 2026-11-16 (session 12) · P6 closed — templates list + editor, custom fields
+
+**Decisions taken (client, 17 Nov):** (1) a rename is **new wording, same field** — never "another body part", so labels always come from the current template; (2) **custom fields are wanted** — a tailor must be able to add a measurement the seeded list never had.
+
+**Shipped / verified**
+
+- **`features/templates/fields.ts` + 14 tests** — the history guarantee as code: `renameField` changes `label` and nothing else; `createField` mints a permanent `custom_<slug>` id (`_2`, `_3` on collision); `moveField` swaps and renumbers 1..n with no gaps; `removeField` closes the gap; `setFieldRequired`; `duplicateLabel` is case-insensitive and ignores the field being edited; `fieldsWithValues` reports which ids already hold data.
+- **`features/templates/validation.ts` + 5 tests** — zod rules for a new field (2–40 chars, no duplicate labels), a rename (same rules, excluding itself), and a template (needs a name and at least one field).
+- **Templates list** (screen 31, `(app)/templates`) — name, field count, `Default · used for new measurements` badge; reached from **Settings → Measurement templates** (the "Phase 6" placeholder row is gone).
+- **Template editor** (screen 32, `(app)/templates/[id]`) — template name, numbered field rows with group/unit/custom tags, ↑/↓ reorder, tap a field to rename it / toggle required / remove it, `Add a field` sheet with group chips, and a sticky `Save template`. Every field edit is local until save, so an accidental tap is one `←` away.
+- **Verified in the browser:** Settings → Templates → `Women — Standard` → `Add a field` → "Head circumference" → **19 fields**; renamed `Neck` → `Neck (base)` (still required, still in position 1); `Save template`; then the entry form for Bola read **"0 of 19 filled"**, showed **`Neck (base)`** and **`Head circumference`** — proving the rename propagates, the custom field reaches the form, and both screens share one cache.
+- `npm run typecheck` clean · `npm test` 153/153 (was 134) · `npm run build:web` exports.
+
+**P6 gate: met.** Editor (rename / add / reorder / delete / validation) + compare with deltas + copy-forward revert. Open, deliberately: reorder uses ↑/↓ rather than drag (no drag dependency added), the delete warning is explanatory rather than count-based (the `Repository` has no bulk measurement read until P10), and the field list doubles as the live preview.
+
+**Next session — start here: P7 · Settings, paywall, referral & export UI** (§7.2): settings hub + business profile, preferences (units, notifications), WhatsApp template editor with token preview, subscription screen + paywall (read-only when expired, everywhere), referral card, export screen, trash and danger zone. `Sheet`, `ConfirmDialog`, `Toast`, `SegmentedTabs`, `useCustomer`/`useDeletedCustomers` and the expiry gate in the mock are already in place; `repositoryErrorCopy.subscription_expired` is the copy to drive the paywall from.
+
 #### 2026-11-16 (session 11) · P6 first slice — version compare and revert
 
 **Shipped / verified**
@@ -933,7 +950,7 @@ Direction from the client: **keep the palette**, tighten the UI/UX against the s
 | P3 | Onboarding + dashboard | 4 | New user reaches a populated demo dashboard in <60s; skeleton/empty/populated states | ◐ onboarding + dashboard ✅ · empty/populated ✅ · **no skeleton loading states** |
 | P4 | Customers + measurements | 6 | Create/read/update/soft-delete customer; 18-field measurement entry; version history with persistence | ✅ **gate met 17 Nov 2026** — create · read · update · soft-delete + restore · 18-field entry · versioned history all verified in-browser. Open (not gate): 500-row perf unmeasured, standalone `[id]/measurements` route deferred to P6 |
 | P5 | Projects + status flow | 5 | Full status machine with confirmations; attachments; archive; overdue derivation | ✅ **gate met 17 Nov 2026** — 6-move machine (12 tests + enforced in the mock), filtered list, detail with confirmations, new/edit job, attachments grid (add/caption/remove), archive by year + reopen, overdue derivation used across home/list/detail. Open (not gate): attachments store local URIs in the mock (P12 swaps to signed URLs), 12-photo cap, project soft-delete deliberately not built (§7.0b session 9) |
-| P6 | Templates + compare | 4 | Editor with reorder/rename/add/delete + validation; compare with deltas and revert | ◐ **compare + revert done** (9 tests, unit-aware) · templates list/editor pending |
+| P6 | Templates + compare | 4 | Editor with reorder/rename/add/delete + validation; compare with deltas and revert | ✅ **gate met 17 Nov 2026** — compare (9 tests) + copy-forward revert with provenance, templates list + editor (rename keeps the id, custom fields get `custom_<slug>`, reorder, delete, zod validation). Open (not gate): reorder is ↑/↓ not drag, delete warning is copy-based (no bulk measurement read yet), live preview is the field list itself |
 | P7 | Settings, paywall, referral UI | 4 | Subscription/expiry/referral/export/trash/danger screens with mock states | ⬜ not started |
 | P8 | Due engine + WhatsApp + notifications | 3 | Due list correct across time-travel; WhatsApp preview + deep link; local notification scheduled | ⬜ not started |
 | P9 | **Polish + DEMO + client sign-off** | 3 | All 44 screens reviewed on iPhone + Android; **written sign-off** recorded; design freeze | ⬜ not started |
