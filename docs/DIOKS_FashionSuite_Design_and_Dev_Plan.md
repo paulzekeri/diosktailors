@@ -747,6 +747,35 @@ The client approved **every** deferral in `DIOKS_Tailors_MVP_Scope_Deferrals_and
 
 One entry per working session. Facts only: what shipped, what was verified, what the next session should pick up. **Updated in the same commit that changes a gate.**
 
+#### 2026-11-16 (session 13) · Fix — back/close did nothing on a deep link
+
+**Reported:** opening `http://localhost:8081/customers/cus_1/measurements/new` directly (or refreshing on it) left the `← Back` button dead.
+
+**Cause:** `router.back()` is a no-op when the history stack has no previous entry — which is exactly the state after a direct URL load or a browser refresh. The button looked broken, but the router had nowhere to go.
+
+**Fix:** `src/lib/navigation.ts` → `goBack(router, fallback)`:
+
+```ts
+if (router.canGoBack()) router.back();
+else router.replace(fallback);   // the screen's logical parent
+```
+
+Typed routes cannot express a path assembled at runtime, so the fallback is cast **once** inside the helper (`fallback as never`) rather than sprinkling casts across 26 call sites. Applied to **all 26** `router.back()` calls in the app — 20 in the `(app)` group (measurements, projects, customers, attachments, templates, archive, compare) and the 6 in `(auth)`, `(onboarding)` and the dev gallery — each with a sensible parent:
+
+| Screen | Fallback |
+|---|---|
+| measurement entry / compare / customer edit / new job | `/customers/{id}` |
+| customer profile | `/customers` |
+| project detail / attachments / project edit | `/projects` · `/projects/{id}` |
+| templates editor / list | `/templates` · `/settings` |
+| archive screen | `/projects` |
+| auth + onboarding | `/login` · `/` · `/welcome` · `/business` |
+
+**Verified in the browser:**
+- deep link `/customers/cus_1/measurements/new` → `← Back` → **`/customers/cus_1`** (profile) ✅
+- profile → `Measure` → `← Back` → `/customers/cus_1` (normal pop) ✅
+- `npm run typecheck` clean · `npm test` 153/153 · `npm run build:web` exports.
+
 #### 2026-11-16 (session 12) · P6 closed — templates list + editor, custom fields
 
 **Decisions taken (client, 17 Nov):** (1) a rename is **new wording, same field** — never "another body part", so labels always come from the current template; (2) **custom fields are wanted** — a tailor must be able to add a measurement the seeded list never had.

@@ -2,6 +2,7 @@ import { useRouter } from 'expo-router';
 import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { goBack } from '@/lib/navigation';
 import { AppText } from '@/components/ui/AppText';
 import { Card } from '@/components/ui/Card';
 import { EmptyState } from '@/components/ui/EmptyState';
@@ -37,7 +38,7 @@ export default function TemplatesScreen() {
         <Pressable
           accessibilityRole="button"
           accessibilityLabel="Back to settings"
-          onPress={() => router.back()}
+          onPress={() => goBack(router, "/settings")}
           hitSlop={10}
           style={styles.back}
         >

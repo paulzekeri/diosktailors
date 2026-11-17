@@ -3,6 +3,7 @@ import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import { ActivityIndicator, Pressable, StyleSheet, View } from 'react-native';
 
+import { goBack } from '@/lib/navigation';
 import { Screen } from '@/components/layout/Screen';
 import { AppText } from '@/components/ui/AppText';
 import { Button } from '@/components/ui/Button';
@@ -231,7 +232,7 @@ export default function BusinessProfileScreen() {
 
       <View style={styles.actions}>
         <Button label="Continue" onPress={next} />
-        <Pressable accessibilityRole="button" onPress={() => router.back()}>
+        <Pressable accessibilityRole="button" onPress={() => goBack(router, "/welcome")}>
           <AppText variant="label" color={colors.inkMuted} center>
             Back
           </AppText>

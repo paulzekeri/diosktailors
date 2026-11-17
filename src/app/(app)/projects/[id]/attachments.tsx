@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { goBack } from '@/lib/navigation';
 import { AppText } from '@/components/ui/AppText';
 import { Button } from '@/components/ui/Button';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
@@ -108,7 +109,7 @@ export default function AttachmentsScreen() {
         <Pressable
           accessibilityRole="button"
           accessibilityLabel="Back to the job"
-          onPress={() => router.back()}
+          onPress={() => goBack(router, `/projects/${id}`)}
           hitSlop={10}
           style={styles.back}
         >

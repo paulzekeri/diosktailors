@@ -1,6 +1,7 @@
 import { Stack, useRouter } from 'expo-router';
 import { Fragment } from 'react';
 
+import { goBack } from '@/lib/navigation';
 import { useToast } from '@/components/ui/Toast';
 import { repositoryErrorCopy, toRepositoryError } from '@/data';
 import { CustomerForm } from '@/features/customers/CustomerForm';
@@ -24,7 +25,7 @@ export default function NewCustomerScreen() {
         subtitle="Name and phone are all you need. Measurements come next."
         submitLabel="Save customer"
         busy={create.isPending}
-        onClose={() => router.back()}
+        onClose={() => goBack(router, "/customers")}
         onSubmit={(values) => {
           create.mutate(toNewCustomer(values), {
             onSuccess: (customer) => {

@@ -2,6 +2,7 @@ import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 
+import { goBack } from '@/lib/navigation';
 import { Screen } from '@/components/layout/Screen';
 import { AppText } from '@/components/ui/AppText';
 import { BrandMark } from '@/components/ui/BrandMark';
@@ -43,7 +44,7 @@ export default function LoginScreen() {
 
   return (
     <Screen contentStyle={styles.content} ambience="hero">
-      <Pressable accessibilityRole="button" onPress={() => router.back()} style={styles.backRow}>
+      <Pressable accessibilityRole="button" onPress={() => goBack(router, "/")} style={styles.backRow}>
         <AppText variant="label" color={colors.primary}>
           ← Back
         </AppText>

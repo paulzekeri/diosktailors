@@ -2,6 +2,7 @@ import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 import { Fragment, useState } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 
+import { goBack } from '@/lib/navigation';
 import { AppText } from '@/components/ui/AppText';
 import { Card } from '@/components/ui/Card';
 import { useToast } from '@/components/ui/Toast';
@@ -42,7 +43,7 @@ export default function NewProjectScreen() {
         submitLabel="Save job"
         initialValues={{ ...EMPTY_PROJECT_FORM, expectedDeliveryAt: addDaysISO(14) }}
         busy={create.isPending}
-        onClose={() => router.back()}
+        onClose={() => goBack(router, `/customers/${customerId}`)}
         aboveFields={
           <Card style={styles.measureCard} tone={linkMeasurement && measurement.data ? 'brand' : 'default'}>
             <View style={styles.measureCopy}>

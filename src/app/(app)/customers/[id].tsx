@@ -3,6 +3,7 @@ import { useMemo, useState } from 'react';
 import { Linking, Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { goBack } from '@/lib/navigation';
 import { AppText } from '@/components/ui/AppText';
 import { Avatar } from '@/components/ui/Avatar';
 import { Button } from '@/components/ui/Button';
@@ -86,7 +87,7 @@ export default function CustomerProfileScreen() {
           <Pressable
             accessibilityRole="button"
             accessibilityLabel="Back to customers"
-            onPress={() => router.back()}
+            onPress={() => goBack(router, "/customers")}
             hitSlop={10}
             style={styles.back}
           >

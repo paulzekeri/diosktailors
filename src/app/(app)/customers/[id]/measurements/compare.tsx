@@ -3,6 +3,7 @@ import { useMemo, useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { goBack } from '@/lib/navigation';
 import { AppText } from '@/components/ui/AppText';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
@@ -83,7 +84,7 @@ export default function CompareVersionsScreen() {
             message: `v${before.version} restored as v${measurement.version} · nothing was overwritten`,
             tone: 'success',
           });
-          router.back();
+          goBack(router, `/customers/${id}`);
         },
         onError: (error) => {
           toast.show({
@@ -110,7 +111,7 @@ export default function CompareVersionsScreen() {
         <Pressable
           accessibilityRole="button"
           accessibilityLabel="Back"
-          onPress={() => router.back()}
+          onPress={() => goBack(router, `/customers/${id}`)}
           hitSlop={10}
           style={styles.back}
         >

@@ -3,6 +3,7 @@ import { Fragment } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { goBack } from '@/lib/navigation';
 import { AppText } from '@/components/ui/AppText';
 import { Card } from '@/components/ui/Card';
 import { EmptyState } from '@/components/ui/EmptyState';
@@ -59,7 +60,7 @@ export default function EditProjectScreen() {
           title="Project unavailable"
           description={repositoryErrorCopy[toRepositoryError(project.error).code]}
           actionLabel="Go back"
-          onAction={() => router.back()}
+          onAction={() => goBack(router, `/projects/${id}`)}
         />
       </View>
     );
@@ -74,7 +75,7 @@ export default function EditProjectScreen() {
         submitLabel="Save changes"
         initialValues={toProjectFormValues(project.data)}
         busy={update.isPending}
-        onClose={() => router.back()}
+        onClose={() => goBack(router, `/projects/${id}`)}
         aboveFields={
           <Card style={styles.summary}>
             <View style={styles.summaryCopy}>
@@ -102,7 +103,7 @@ export default function EditProjectScreen() {
             {
               onSuccess: () => {
                 toast.show({ message: 'Job updated', tone: 'success' });
-                router.back();
+                goBack(router, `/projects/${id}`);
               },
               onError: (error) => {
                 toast.show({

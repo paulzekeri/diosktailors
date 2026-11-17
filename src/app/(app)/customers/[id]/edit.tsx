@@ -3,6 +3,7 @@ import { Fragment, useMemo, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { goBack } from '@/lib/navigation';
 import { AppText } from '@/components/ui/AppText';
 import { Button } from '@/components/ui/Button';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
@@ -58,7 +59,7 @@ export default function EditCustomerScreen() {
           title="Customer unavailable"
           description={repositoryErrorCopy[toRepositoryError(customer.error).code]}
           actionLabel="Go back"
-          onAction={() => router.back()}
+          onAction={() => goBack(router, `/customers/${id}`)}
         />
       </View>
     );
@@ -76,12 +77,12 @@ export default function EditCustomerScreen() {
         initialValues={initialValues}
         busy={update.isPending}
         excludeCustomerId={customer.data.id}
-        onClose={() => router.back()}
+        onClose={() => goBack(router, `/customers/${id}`)}
         onSubmit={(values) => {
           update.mutate(toNewCustomer(values), {
             onSuccess: () => {
               toast.show({ message: 'Customer updated', tone: 'success' });
-              router.back();
+              goBack(router, `/customers/${id}`);
             },
             onError: (error) => {
               toast.show({

@@ -2,6 +2,7 @@ import { Stack, useRouter } from 'expo-router';
 import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { goBack } from '@/lib/navigation';
 import { AppText } from '@/components/ui/AppText';
 import { Avatar } from '@/components/ui/Avatar';
 import { Button } from '@/components/ui/Button';
@@ -43,7 +44,7 @@ export default function DeletedCustomersScreen() {
         <Pressable
           accessibilityRole="button"
           accessibilityLabel="Back to customers"
-          onPress={() => router.back()}
+          onPress={() => goBack(router, "/customers")}
           hitSlop={10}
           style={styles.back}
         >

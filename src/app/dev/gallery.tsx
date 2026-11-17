@@ -2,6 +2,7 @@ import { useRouter } from 'expo-router';
 import { useState, type ReactNode } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 
+import { goBack } from '@/lib/navigation';
 import { Screen } from '@/components/layout/Screen';
 import { AppText } from '@/components/ui/AppText';
 import { Avatar } from '@/components/ui/Avatar';
@@ -70,7 +71,7 @@ export default function GalleryScreen() {
         </AppText>
       </View>
 
-      <Button label="Back to landing" variant="ghost" onPress={() => router.back()} fullWidth={false} />
+      <Button label="Back to landing" variant="ghost" onPress={() => goBack(router, "/")} fullWidth={false} />
 
       <Section title="Brand & ambience">
         <View style={styles.row}>

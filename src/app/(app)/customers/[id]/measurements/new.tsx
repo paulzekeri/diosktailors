@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { goBack } from '@/lib/navigation';
 import { AppText } from '@/components/ui/AppText';
 import { Avatar } from '@/components/ui/Avatar';
 import { Button } from '@/components/ui/Button';
@@ -158,7 +159,7 @@ export default function NewMeasurementScreen() {
                 : 'Saved as v1 · first version',
             tone: 'success',
           });
-          router.back();
+          goBack(router, `/customers/${customerId}`);
         },
         onError: (error) => {
           toast.show({ message: repositoryErrorCopy[toRepositoryError(error).code], tone: 'danger', duration: 6000 });
@@ -188,7 +189,7 @@ export default function NewMeasurementScreen() {
           <Pressable
             accessibilityRole="button"
             accessibilityLabel="Back"
-            onPress={() => router.back()}
+            onPress={() => goBack(router, `/customers/${customerId}`)}
             hitSlop={10}
             style={styles.back}
           >
@@ -221,7 +222,7 @@ export default function NewMeasurementScreen() {
               title="No measurement fields"
               description="Finish onboarding or pick a template first — then measurements can be recorded here."
               actionLabel="Go back"
-              onAction={() => router.back()}
+              onAction={() => goBack(router, `/customers/${customerId}`)}
             />
           ) : (
             <>
