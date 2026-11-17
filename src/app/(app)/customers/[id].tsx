@@ -14,6 +14,7 @@ import { StatusPill } from '@/components/ui/StatusPill';
 import { Wash } from '@/components/ui/Wash';
 import { repositoryErrorCopy, toRepositoryError } from '@/data';
 import { useCustomer, useCustomerProjects } from '@/features/customers/queries';
+import { provenanceLabel } from '@/features/measurements/compare';
 import { useMeasurementVersions, useTemplates } from '@/features/measurements/queries';
 import { formatLongDate, formatShortDate } from '@/lib/date';
 import { formatPhoneDisplay, whatsappUrl } from '@/lib/phone';
@@ -46,6 +47,7 @@ export default function CustomerProfileScreen() {
   }, [templates.data]);
 
   const current = versions.data?.find((version) => version.isCurrent) ?? versions.data?.[0];
+  const currentProvenance = current ? provenanceLabel(current, formatShortDate) : undefined;
   const whatsapp = customer.data?.whatsappE164 ?? customer.data?.phoneE164;
 
   /** Template order, so a saved version always reads neck → shoulder → bust … */
@@ -210,6 +212,7 @@ export default function CustomerProfileScreen() {
                     <AppText variant="label">Version {current.version} · current</AppText>
                     <AppText variant="caption" color={colors.inkMuted}>
                       {formatLongDate(current.recordedAt)} · {current.unit === 'inches' ? 'inches' : 'centimetres'}
+                      {currentProvenance ? ` · ${currentProvenance}` : ''}
                     </AppText>
                     <View style={styles.valueGrid}>
                       {orderedFields
@@ -262,6 +265,11 @@ export default function CustomerProfileScreen() {
                                 {Object.values(version.data).filter((value) => typeof value === 'number').length} fields ·{' '}
                                 {version.unit === 'inches' ? 'in' : 'cm'}
                               </AppText>
+                              {provenanceLabel(version, formatShortDate) ? (
+                                <AppText variant="caption" color={colors.inkSubtle}>
+                                  {provenanceLabel(version, formatShortDate)}
+                                </AppText>
+                              ) : null}
                             </View>
                             <AppText variant="caption" weight="semiBold" color={colors.primary}>
                               Compare

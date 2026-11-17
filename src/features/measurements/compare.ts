@@ -107,3 +107,19 @@ export function summaryLabel(summary: CompareSummary): string {
 export function changedRows(rows: CompareRow[]): CompareRow[] {
   return rows.filter((row) => row.changed);
 }
+
+/**
+ * Where a copied version's numbers came from: `copied from v1 · measured 19 Jul`.
+ * `sourceRecordedAt` survives a chain of reverts, so the date is always the
+ * original measurement, not the copy.
+ */
+export function provenanceLabel(
+  measurement: Pick<Measurement, 'copiedFromVersion' | 'sourceRecordedAt'>,
+  formatDate: (iso: string) => string,
+): string | undefined {
+  if (!measurement.copiedFromVersion) return undefined;
+  const source = measurement.sourceRecordedAt
+    ? ` · measured ${formatDate(measurement.sourceRecordedAt)}`
+    : '';
+  return `copied from v${measurement.copiedFromVersion}${source}`;
+}

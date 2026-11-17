@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
 import { WOMEN_FIELDS } from '@/data/templates';
-import { changedRows, compareSummary, compareVersions, summaryLabel } from '../compare';
+import { changedRows, compareSummary, compareVersions, provenanceLabel, summaryLabel } from '../compare';
 
 const v2 = {
   data: {
@@ -90,6 +90,31 @@ describe('compareVersions', () => {
     expect(waist?.from).toBe(82.55);
     expect(waist?.to).toBe(86.36);
     expect(waist?.delta?.diff).toBe(3.81);
+  });
+});
+
+describe('provenanceLabel', () => {
+  const asDay = (iso: string) => iso.slice(0, 10);
+
+  it('is absent for a version that was recorded fresh', () => {
+    expect(provenanceLabel({}, asDay)).toBeUndefined();
+  });
+
+  it('names the copied version and the original measurement date', () => {
+    expect(provenanceLabel({ copiedFromVersion: 1, sourceRecordedAt: '2026-07-19T10:00:00.000Z' }, asDay)).toBe(
+      'copied from v1 · measured 2026-07-19',
+    );
+  });
+
+  it('survives a chain of reverts: the date stays the original one', () => {
+    // v4 copied v3, which itself was copied from v1 — sourceRecordedAt carries v1's date.
+    expect(provenanceLabel({ copiedFromVersion: 3, sourceRecordedAt: '2026-07-19T10:00:00.000Z' }, asDay)).toBe(
+      'copied from v3 · measured 2026-07-19',
+    );
+  });
+
+  it('still names the source when the date is missing', () => {
+    expect(provenanceLabel({ copiedFromVersion: 2 }, asDay)).toBe('copied from v2');
   });
 });
 

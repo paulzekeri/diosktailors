@@ -80,6 +80,10 @@ export interface Measurement {
   isCurrent: boolean;
   notes?: string;
   recordedAt: string;
+  /** Set when this version was created by reverting: the version it copied. */
+  copiedFromVersion?: number;
+  /** The original measurement date carried through a copy (may predate `recordedAt`). */
+  sourceRecordedAt?: string;
 }
 
 export type AttachmentKind = 'photo' | 'reference' | 'wa_screenshot' | 'voice';
@@ -186,4 +190,6 @@ export interface NewMeasurement {
   data: Measurement['data'];
   unit: Unit;
   notes?: string;
+  copiedFromVersion?: number;
+  sourceRecordedAt?: string;
 }

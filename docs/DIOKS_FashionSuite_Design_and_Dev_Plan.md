@@ -13,7 +13,7 @@
 > | **Current phase** | **P6 · Templates + compare** — ◐ compare + revert done; **templates list + editor next** |
 > | **Built** | P0–P5 (P4, P5 ✅) + P6: version compare with deltas, changed-only filter, revert-as-new-version (§7.0b) |
 > | **Runs today** | `cd app && npm start` (Expo web + Expo Go). Mock data, 3 demo accounts |
-> | **Verified** | `npm run typecheck` clean · `npm test` 130/130 · `npm run build:web` exports |
+> | **Verified** | `npm run typecheck` clean · `npm test` 134/134 · `npm run build:web` exports |
 > | **Read next** | §7.1 (per-gate status) → §7.0b (session log + known gaps) → §7.2 P6 |
 >
 > **Rule:** status is ticked in §7.1 and logged in §7.0b **in the same commit that passes a gate**. A new session must be able to resume from this file alone — no memory, no chat history.
@@ -757,6 +757,8 @@ One entry per working session. Facts only: what shipped, what was verified, what
 - **Profile wiring** — the current-version card gained "Compare with the previous version"; each history row is now tappable and opens a comparison of that version against the current one.
 - **Verified in the browser:** `v1 → v2` showed `2 changed`, changed-only gave Waist `31" → 32 1/2" ↑ +1 1/2` and Hip `40" → 41" ↑ +1`; turning the toggle off listed all 18 fields with `0` for the unchanged ones; `Revert to v1` → confirm → profile now reads **Version 3 · current** with Waist `31"` and the next action `New measurement · v4`, proving v1's values were saved as a new version and v2 stayed in history.
 - `npm run typecheck` clean · `npm test` 130/130 (was 121) · `npm run build:web` exports.
+
+**Follow-up in the same session — copy-forward confirmed with provenance.** Client confirmed revert should *copy forward* rather than flip a pointer back. So the copied version now records where it came from: `Measurement` gained `copiedFromVersion` and `sourceRecordedAt` (the original date, carried through any chain of reverts), `provenanceLabel()` renders `copied from v1 · measured 19 Jul`, and both the current card and every history row show it. The confirmation copy states the date being carried. Verified: the profile reads `Version 4 · current · 17 Nov 2026 · inches · copied from v1 · measured 19 Jul` — so a tailor can see at a glance that today's "31 inches" came from July's measurement. 4 more tests (134/134).
 
 **Remaining in P6:** the templates list and editor (screens 31/32) — add / rename / reorder / delete a field, zod `TemplateV1` validation, live preview, and a warning before deleting a field that has values in saved measurements. The stable-field-key rule (rename must not orphan history) is already how `templates.ts` is built, so the tests for it only need the editor.
 

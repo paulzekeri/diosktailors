@@ -72,6 +72,9 @@ export default function CompareVersionsScreen() {
         data: before.data,
         unit: before.unit,
         notes: `Reverted from v${before.version}`,
+        copiedFromVersion: before.version,
+        /** Carry the true measurement date through any chain of reverts. */
+        sourceRecordedAt: before.sourceRecordedAt ?? before.recordedAt,
       },
       {
         onSuccess: (measurement) => {
@@ -216,7 +219,7 @@ export default function CompareVersionsScreen() {
       <ConfirmDialog
         visible={confirmRevert}
         title={`Restore v${before?.version ?? ''}?`}
-        message={`Its ${Object.values(before?.data ?? {}).filter((value) => typeof value === 'number').length} values are saved as a new version. Nothing is overwritten and v${after?.version ?? ''} stays in history.`}
+        message={`Its ${Object.values(before?.data ?? {}).filter((value) => typeof value === 'number').length} values are saved as a new version, dated ${formatShortDate(before?.sourceRecordedAt ?? before?.recordedAt ?? '')} — the real measurement date. Nothing is overwritten and v${after?.version ?? ''} stays in history.`}
         confirmLabel="Save as new version"
         loading={saveVersion.isPending}
         onCancel={() => setConfirmRevert(false)}

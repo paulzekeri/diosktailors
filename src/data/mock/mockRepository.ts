@@ -455,6 +455,8 @@ export const mockRepository: Repository = {
         isCurrent: true,
         notes: input.notes,
         recordedAt: nowISO(),
+        copiedFromVersion: input.copiedFromVersion,
+        sourceRecordedAt: input.sourceRecordedAt,
       };
       database.measurements.push(created);
       await persistDb();
