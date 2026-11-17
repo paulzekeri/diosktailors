@@ -54,9 +54,34 @@ export const colors = {
   // skeleton shimmer
   skeleton: '#EFE9E2',
   skeletonHighlight: '#F7F3EE',
+
+  // presence
+  online: '#3EA76A',
 } as const;
 
 export type ColorToken = keyof typeof colors;
+
+/**
+ * Bottom tab bar — a floating deep-wine bar with a lighter active pill
+ * (reference polish pass, 17 Nov). Kept out of `colors` because it is a surface
+ * *system*, not a colour: text/icon tints travel with the background.
+ */
+export const tabBarTheme = {
+  background: colors.primaryDeep,
+  activePill: colors.primary,
+  activeTint: colors.canvas,
+  inactiveTint: 'rgba(251, 249, 246, 0.66)',
+  radius: 22,
+  edge: 12,
+  lift: 10,
+} as const;
+
+/** Fine diagonal weave for paper-like surfaces. Very low contrast on purpose. */
+export const texture = {
+  line: 'rgba(123, 45, 67, 0.05)',
+  spacing: 7,
+} as const;
+
 
 export type ProjectStatus = 'pending' | 'in_progress' | 'completed' | 'delivered' | 'archived' | 'overdue';
 

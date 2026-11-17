@@ -746,6 +746,23 @@ The client approved **every** deferral in `DIOKS_Tailors_MVP_Scope_Deferrals_and
 
 One entry per working session. Facts only: what shipped, what was verified, what the next session should pick up. **Updated in the same commit that changes a gate.**
 
+#### 2026-11-16 (session 6) · UI/UX polish pass — reference-inspired shell and dashboard
+
+Direction from the client: **keep the palette**, tighten the UI/UX against the supplied reference. Explicit correction recorded: the trial shows a **days count, never a percentage bar**.
+
+**Shipped**
+
+- **Floating deep-wine tab bar** — `tabBarTheme` token (background `primaryDeep`, active pill `primary`, cream tints, 22px radius, 12px inset, 10px lift). Active tab is a wine capsule; inactive icons/labels are cream at 66% (≈6:1 on the deep bar). Bar sits *inside* the space screens already reserve, so nothing hides behind it.
+- **Linen weave** — `texture` token + `Card texture` prop: a 45° 5% hairline SVG pattern clipped to the card radius. Used on stat tiles, the subscription card and empty states.
+- **Dashboard rework** — display-size greeting with a single source of truth for the studio name, avatar presence dot (`colors.online`), **subscription card with a days-left badge** (trial: "8 days left"; expired: "Read-only"), 2×2 textured stat tiles with icon discs and 34px numerals, **quick actions** (Add customer · Customers · Due), section headers with counts, delivery rows that carry the overdue accent + pill + "View details" and open the customer, celebrations count, and the stale "customer screens arrive in Phase 4" copy replaced with a working CTA.
+- **Due tab** — overdue cards now lead with a numeral block (`2 / days late`), keep the danger accent and pill, and every row exposes "View details" and opens the customer.
+- Gallery gained a **Paper texture** section.
+
+**Fixed during review:** at 360px the tab label ellipsized to "Custom…" — the recurring `numberOfLines` trap, this time horizontal. Labels dropped to 10px and the active pill from 52 → 46px; verified at 360 and 430.
+
+- `npm run typecheck` clean · `npm test` 92/92 · `npm run build:web` exports · screenshots verified at 430×932 (home, due, customers) and 360×780 (home).
+- Palette untouched: only one new colour (`online` for the presence dot) plus the two surface tokens above.
+
 #### 2026-11-16 (session 5) · P4 closed — edit, soft delete + restore; shared customer form
 
 **Shipped / verified**

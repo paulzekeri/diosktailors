@@ -35,8 +35,8 @@ Phase status, gate caveats and the next task live in `docs/DIOKS_FashionSuite_De
 | Session provider + guards (`(app)/_layout.tsx`, `(onboarding)/_layout.tsx`) | done |
 | Onboarding: welcome → business → unit/template → referral → done | done — creates the profile, seeds the chosen template, starts the 14-day trial |
 | Logo upload with client-side compression (`expo-image-manipulator`, 512px / 70%) | done |
-| 5-tab shell: Home · Customers · Projects · Due · Settings (5 inline SVG icons, ~2 KB) | done |
-| Home dashboard: 4 stats, trial banner, deliveries this week, celebrations with 1-tap WhatsApp, recent customers | done |
+| 5-tab shell: Home · Customers · Projects · Due · Settings — floating deep-wine bar with an active pill (5 inline SVG icons, ~3 KB) | done |
+| Home dashboard: display-size greeting + presence dot, trial card with **days left**, 4 textured stat tiles, quick actions, deliveries with inline status + view details, celebrations with 1-tap WhatsApp, recent customers | done |
 | Due tab grouped Overdue / Today / This week | done — read-only |
 | Customers & Projects tabs | read-only previews — full CRUD in Phases 4–5 |
 | Settings: business card, subscription, referral code, sign out | done — editable settings in Phase 7 |

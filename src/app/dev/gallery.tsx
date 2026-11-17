@@ -254,6 +254,21 @@ export default function GalleryScreen() {
         <Button label="Confirm delivery" variant="secondary" onPress={() => setConfirmOpen(true)} />
       </Section>
 
+      <Section title="Paper texture">
+        <Card texture>
+          <AppText variant="label">Linen weave</AppText>
+          <AppText variant="caption" color={colors.inkMuted}>
+            A 45° hairline pattern at 5% — stat tiles read as paper, not plastic.
+          </AppText>
+        </Card>
+        <Card texture tone="brand">
+          <AppText variant="label">Linen on the wine wash</AppText>
+          <AppText variant="caption" color={colors.inkMuted}>
+            Same weave over the brand tint, used for the trial card.
+          </AppText>
+        </Card>
+      </Section>
+
       <Section title="Progress">
         <Stepper step={2} />
         <Stepper step={4} />

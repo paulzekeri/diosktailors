@@ -1,7 +1,8 @@
-import type { ReactNode } from 'react';
+import { useId, type ReactNode } from 'react';
 import { Pressable, StyleSheet, View, type StyleProp, type ViewStyle } from 'react-native';
+import Svg, { Defs, Line, Pattern, Rect } from 'react-native-svg';
 
-import { colors, radius, shadows, spacing } from '@/theme';
+import { colors, radius, shadows, spacing, texture } from '@/theme';
 
 type Tone = 'default' | 'muted' | 'brand';
 
@@ -18,6 +19,8 @@ type Props = {
   tone?: Tone;
   /** 3px rule on the leading edge — marks the row that needs attention. */
   accent?: 'primary' | 'gold' | 'danger';
+  /** Fine diagonal weave — the paper feel on stat tiles and quiet cards. */
+  texture?: boolean;
   accessibilityLabel?: string;
 };
 
@@ -38,6 +41,7 @@ export function Card({
   flat,
   tone = 'default',
   accent,
+  texture: woven,
   accessibilityLabel,
 }: Props) {
   const base = [
@@ -51,6 +55,7 @@ export function Card({
 
   const content = (
     <>
+      {woven ? <LinenWeave /> : null}
       <View pointerEvents="none" style={styles.sheen} />
       {children}
     </>
@@ -75,6 +80,30 @@ export function Card({
   );
 }
 
+/** Decorative diagonal weave clipped to the card's radius. */
+function LinenWeave() {
+  const uid = `weave-${useId().replace(/[^a-zA-Z0-9_-]/g, '')}`;
+
+  return (
+    <View pointerEvents="none" style={styles.weave}>
+      <Svg width="100%" height="100%">
+        <Defs>
+          <Pattern
+            id={uid}
+            width={texture.spacing}
+            height={texture.spacing}
+            patternUnits="userSpaceOnUse"
+            patternTransform="rotate(45)"
+          >
+            <Line x1="0" y1="0" x2="0" y2={texture.spacing} stroke={texture.line} strokeWidth={1} />
+          </Pattern>
+        </Defs>
+        <Rect x="0" y="0" width="100%" height="100%" fill={`url(#${uid})`} />
+      </Svg>
+    </View>
+  );
+}
+
 const styles = StyleSheet.create({
   card: {
     borderRadius: radius.lg,
@@ -91,7 +120,17 @@ const styles = StyleSheet.create({
     backgroundColor: colors.highlight,
     opacity: 0.9,
   },
+  weave: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    borderRadius: radius.lg,
+    overflow: 'hidden',
+  },
   pressed: { backgroundColor: colors.surfaceMuted, transform: [{ scale: 0.995 }] },
   pressedBrand: { backgroundColor: colors.primarySoft, transform: [{ scale: 0.995 }] },
 });
+
 

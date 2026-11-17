@@ -1,13 +1,14 @@
-import { useFocusEffect } from 'expo-router';
+import { useFocusEffect, useRouter } from 'expo-router';
 import { useCallback, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 
 import { Screen } from '@/components/layout/Screen';
 import { AppText } from '@/components/ui/AppText';
 import { Card } from '@/components/ui/Card';
+import { StatusPill } from '@/components/ui/StatusPill';
 import { repo, type Reminder } from '@/data';
 import { dueLabel } from '@/lib/date';
-import { colors, layout, spacing } from '@/theme';
+import { colors, layout, radius, spacing } from '@/theme';
 
 const KIND_LABEL: Record<Reminder['kind'], string> = {
   delivery: 'Delivery',
@@ -17,6 +18,7 @@ const KIND_LABEL: Record<Reminder['kind'], string> = {
 };
 
 export default function DueScreen() {
+  const router = useRouter();
   const [reminders, setReminders] = useState<Reminder[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -45,20 +47,45 @@ export default function DueScreen() {
       <View style={styles.section}>
         <View style={styles.sectionHeader}>
           <AppText variant="h3">{title}</AppText>
-          <AppText variant="caption" color={tone}>
+          <AppText variant="caption" weight="semiBold" color={tone}>
             {items.length}
           </AppText>
         </View>
         {items.map((item) => (
-          <Card key={item.id} style={styles.row}>
+          <Card
+            key={item.id}
+            style={styles.row}
+            accent={item.daysUntil < 0 ? 'danger' : undefined}
+            onPress={() => router.push(`/customers/${item.customerId}` as never)}
+            accessibilityLabel={`${item.projectName ?? item.customerName}, ${dueLabel(item.daysUntil)}`}
+          >
+            {item.daysUntil < 0 ? (
+              <View style={styles.numeral}>
+                <AppText variant="h2" weight="bold" tabular color={colors.danger}>
+                  {Math.abs(item.daysUntil)}
+                </AppText>
+                <AppText variant="caption" color={colors.danger}>
+                  {Math.abs(item.daysUntil) === 1 ? 'day late' : 'days late'}
+                </AppText>
+              </View>
+            ) : null}
             <View style={styles.rowCopy}>
-              <AppText variant="label">
-                {item.projectName ? `${item.projectName} · ${item.customerName}` : item.customerName}
+              <AppText variant="label" numberOfLines={1}>
+                {item.projectName ?? item.customerName}
               </AppText>
-              <AppText variant="caption" color={colors.inkMuted}>
-                {KIND_LABEL[item.kind]} · {dueLabel(item.daysUntil)}
+              <AppText variant="caption" color={colors.inkMuted} numberOfLines={1}>
+                {item.customerName} · {KIND_LABEL[item.kind]}
               </AppText>
+              <View style={styles.meta}>
+                <AppText variant="caption" color={item.daysUntil < 0 ? colors.danger : colors.inkMuted}>
+                  {dueLabel(item.daysUntil)}
+                </AppText>
+                <AppText variant="caption" weight="semiBold" color={colors.primary}>
+                  View details
+                </AppText>
+              </View>
             </View>
+            {item.daysUntil < 0 ? <StatusPill status="overdue" /> : null}
           </Card>
         ))}
       </View>
@@ -103,7 +130,17 @@ const styles = StyleSheet.create({
   header: { gap: spacing.xxs },
   section: { gap: spacing.sm },
   sectionHeader: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
-  row: { flexDirection: 'row', alignItems: 'center', gap: spacing.md },
+  row: { flexDirection: 'row', alignItems: 'center', gap: spacing.md, minHeight: layout.rowHeight },
+  numeral: {
+    minWidth: 52,
+    paddingVertical: spacing.xs,
+    paddingHorizontal: spacing.sm,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: radius.sm,
+    backgroundColor: colors.dangerSoft,
+  },
   rowCopy: { flex: 1, gap: spacing.xxs },
+  meta: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: spacing.sm },
   note: { backgroundColor: colors.surfaceMuted, gap: spacing.xxs },
 });
