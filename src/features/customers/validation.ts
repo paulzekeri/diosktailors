@@ -5,7 +5,7 @@
 import { z } from 'zod';
 
 import type { Customer, NewCustomer } from '@/data/types';
-import { todayISO } from '@/lib/date';
+import { isRealISODate, todayISO } from '@/lib/date';
 import { zodFieldErrors, type FieldErrors } from '@/lib/forms';
 import { formatPhoneDisplay, toE164 } from '@/lib/phone';
 
@@ -24,19 +24,12 @@ const optionalEmail = z
   .trim()
   .refine((value) => !value || EMAIL_PATTERN.test(value), { error: 'Enter a valid email address' });
 
-/** `2026-02-30` matches the pattern but is not a real date. */
-function isRealDate(iso: string): boolean {
-  const [year, month, day] = iso.split('-').map(Number);
-  const date = new Date(year ?? 0, (month ?? 1) - 1, day ?? 1);
-  return date.getFullYear() === year && date.getMonth() === (month ?? 1) - 1 && date.getDate() === day;
-}
-
 const pastDate = (label: string) =>
   z
     .string()
     .trim()
     .refine((value) => !value || ISO_DATE.test(value), { error: 'Use the date picker' })
-    .refine((value) => !value || isRealDate(value), { error: 'That date does not exist' })
+    .refine((value) => !value || isRealISODate(value), { error: 'That date does not exist' })
     .refine((value) => !value || value <= todayISO(), { error: `${label} cannot be in the future` });
 
 export const customerFormSchema = z.object({

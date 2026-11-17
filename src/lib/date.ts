@@ -60,6 +60,14 @@ export function formatLongDate(iso: string): string {
   return `${date.getDate()} ${MONTHS[date.getMonth()]} ${date.getFullYear()}`;
 }
 
+/** True when `YYYY-MM-DD` is a real calendar date (`2026-02-30` is not). */
+export function isRealISODate(iso: string): boolean {
+  const [year, month, day] = iso.split('-').map(Number);
+  if (!year || !month || !day) return false;
+  const date = new Date(year, month - 1, day);
+  return date.getFullYear() === year && date.getMonth() === month - 1 && date.getDate() === day;
+}
+
 /** "Overdue by 2 days" · "Today" · "Tomorrow" · "In 5 days" */
 export function dueLabel(days: number): string {
   if (days < -1) return `Overdue by ${Math.abs(days)} days`;

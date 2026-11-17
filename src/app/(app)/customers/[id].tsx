@@ -154,6 +154,29 @@ export default function CustomerProfileScreen() {
               </Pressable>
             </View>
 
+            <View style={styles.actions}>
+              <Pressable
+                accessibilityRole="button"
+                accessibilityLabel={`New job for ${customer.data.fullName}`}
+                onPress={() => router.push(`/customers/${id}/projects/new` as never)}
+                style={[styles.action, styles.actionSecondary]}
+              >
+                <AppText variant="label" weight="semiBold" color={colors.ink}>
+                  New job
+                </AppText>
+              </Pressable>
+              <Pressable
+                accessibilityRole="button"
+                accessibilityLabel={`Take measurements for ${customer.data.fullName}`}
+                onPress={() => router.push(`/customers/${id}/measurements/new` as never)}
+                style={[styles.action, styles.actionSecondary]}
+              >
+                <AppText variant="label" weight="semiBold" color={colors.ink}>
+                  Measure
+                </AppText>
+              </Pressable>
+            </View>
+
             <SegmentedTabs
               accessibilityLabel="Customer sections"
               value={segment}

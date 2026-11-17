@@ -10,10 +10,11 @@ const LEGAL = new Set([
   'completed>delivered',
   'completed>in_progress',
   'delivered>archived',
+  'archived>in_progress',
 ]);
 
 describe('canTransition (the whole table)', () => {
-  it('matches the legal set exactly — 5 moves out of 25 pairs', () => {
+  it('matches the legal set exactly — 6 moves out of 25 pairs', () => {
     let legal = 0;
     for (const from of ALL) {
       for (const to of ALL) {
@@ -32,8 +33,10 @@ describe('canTransition (the whole table)', () => {
     expect(canTransition('pending', 'archived')).toBe(false);
   });
 
-  it('treats archived as terminal', () => {
-    expect(nextStatuses('archived')).toEqual([]);
+  it('keeps archive closed except for the explicit reopen', () => {
+    expect(nextStatuses('archived')).toEqual(['in_progress']);
+    expect(canTransition('archived', 'pending')).toBe(false);
+    expect(canTransition('archived', 'delivered')).toBe(false);
   });
 
   it('lists the contextual next steps per status', () => {
@@ -61,8 +64,10 @@ describe('actionsFor', () => {
     expect(archive.confirm?.message).toMatch(/measurements, photos and history stay/i);
   });
 
-  it('offers nothing for archived', () => {
-    expect(actionsFor('archived')).toEqual([]);
+  it('offers reopen as a confirmed secondary action on archived jobs', () => {
+    const [reopen] = actionsFor('archived');
+    expect(reopen).toMatchObject({ to: 'in_progress', secondary: true });
+    expect(reopen.confirm?.title).toMatch(/reopen/i);
   });
 
   it('marks rework as secondary so it is never the primary button', () => {

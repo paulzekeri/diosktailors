@@ -17,7 +17,8 @@ const TRANSITIONS: Record<ProjectStatus, readonly ProjectStatus[]> = {
   in_progress: ['completed'],
   completed: ['delivered', 'in_progress'],
   delivered: ['archived'],
-  archived: [],
+  /** Reopen is the one way back out of the archive (client decision, 17 Nov). */
+  archived: ['in_progress'],
 };
 
 /** Lifecycle order, used by the timeline on the detail screen. */
@@ -100,7 +101,19 @@ export function actionsFor(status: ProjectStatus): StatusAction[] {
         },
       ];
     case 'archived':
-      return [];
+      return [
+        {
+          to: 'in_progress',
+          label: 'Reopen job',
+          secondary: true,
+          confirm: {
+            title: 'Reopen this job?',
+            message: 'It returns to in progress and appears in active lists and due reminders again. Nothing is lost.',
+            confirmLabel: 'Reopen job',
+          },
+          toast: 'Reopened · back in progress',
+        },
+      ];
   }
 }
 

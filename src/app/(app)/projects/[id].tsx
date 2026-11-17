@@ -225,14 +225,25 @@ export default function ProjectDetailScreen() {
               </Card>
             ) : null}
 
-            {primary ? (
+            {project.data.status === 'archived' ? (
+              <Card style={styles.noteCard} tone="muted">
+                <AppText variant="label">Archived</AppText>
+                <AppText variant="caption" color={colors.inkMuted}>
+                  Finished and filed. Measurements, photos and history stay attached to the customer.
+                </AppText>
+              </Card>
+            ) : null}
+
+            {actions.length > 0 ? (
               <View style={styles.actions}>
-                <Button
-                  label={primary.label}
-                  variant={primary.destructive ? 'danger' : 'primary'}
-                  loading={setStatus.isPending}
-                  onPress={() => tapAction(primary)}
-                />
+                {primary ? (
+                  <Button
+                    label={primary.label}
+                    variant={primary.destructive ? 'danger' : 'primary'}
+                    loading={setStatus.isPending}
+                    onPress={() => tapAction(primary)}
+                  />
+                ) : null}
                 {secondary.map((action) => (
                   <Button
                     key={action.label}
@@ -243,14 +254,7 @@ export default function ProjectDetailScreen() {
                   />
                 ))}
               </View>
-            ) : (
-              <Card style={styles.noteCard} tone="muted">
-                <AppText variant="label">Archived</AppText>
-                <AppText variant="caption" color={colors.inkMuted}>
-                  Finished and filed. Measurements, photos and history stay attached to the customer.
-                </AppText>
-              </Card>
-            )}
+            ) : null}
           </>
         )}
       </ScrollView>

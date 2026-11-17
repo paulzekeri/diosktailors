@@ -10,10 +10,10 @@
 >
 > | | |
 > |---|---|
-> | **Current phase** | **P5 · Projects + status flow** — ◐ state machine · projects list · project detail done; new/edit/attachments pending |
-> | **Built** | P0–P4 (§7.1: P4 ✅) + P5 first slice: status machine, filtered projects list, detail with the full transition chain (§7.0b) |
+> | **Current phase** | **P5 · Projects + status flow** — ◐ machine · list · detail · new job · archive-by-year + reopen done; edit + attachments pending |
+> | **Built** | P0–P4 (§7.1: P4 ✅) + P5: status machine (6 moves), filtered list, detail, new job, archive by year with reopen (§7.0b) |
 > | **Runs today** | `cd app && npm start` (Expo web + Expo Go). Mock data, 3 demo accounts |
-> | **Verified** | `npm run typecheck` clean · `npm test` 104/104 · `npm run build:web` exports |
+> | **Verified** | `npm run typecheck` clean · `npm test` 111/111 · `npm run build:web` exports |
 > | **Read next** | §7.1 (per-gate status) → §7.0b (session log + known gaps) → §7.2 P5 |
 >
 > **Rule:** status is ticked in §7.1 and logged in §7.0b **in the same commit that passes a gate**. A new session must be able to resume from this file alone — no memory, no chat history.
@@ -746,6 +746,22 @@ The client approved **every** deferral in `DIOKS_Tailors_MVP_Scope_Deferrals_and
 
 One entry per working session. Facts only: what shipped, what was verified, what the next session should pick up. **Updated in the same commit that changes a gate.**
 
+#### 2026-11-16 (session 8) · P5 second slice — reopen decision, new job, archive by year
+
+**Decision taken (client: "proceed" on the recommendation):** `archived → in_progress` is now a **legal transition**, implemented as an explicit "Reopen job" action with its own confirmation. The plan's machine and its tests were updated in the same commit, so the DB trigger in P10 has an exact spec to enforce.
+
+**Shipped / verified**
+
+- **Status machine** — six legal moves now (the pairwise test asserts all 25). `actionsFor('archived')` returns a confirmed *secondary* action, so an archived job still shows its "finished and filed" note **and** a reopen button rather than losing the note.
+- **New job** (screen 25, `(app)/customers/[id]/projects/new`) — name*, expected delivery* (defaults to today + 14 days), description / instructions / notes, a **measurement link toggle** that defaults to on when a current version exists, saves as `pending`, then lands on the detail with a toast. `features/projects/validation.ts` + 8 tests (real dates, past dates allowed, 500-char caps, received-date defaults to today).
+- **Archived screen** (screen 30, `(app)/archived`) — grouped by year (newest first, using `collectedAt` then `expectedDeliveryAt`), 250 ms search over job and customer, per-row `Reopen` + `View`, empty/no-match states, and the reopen confirmation copy taken **from the machine** so it cannot drift from the detail screen.
+- **Customer profile** gained the missing actions: `New job` and `Measure` beside WhatsApp/Call (Edit already sits in the top bar).
+- **`isRealISODate`** moved to `lib/date.ts` and reused by both customer and project schemas instead of being duplicated.
+- **Verified in the browser:** profile → `New job` → named "Aso-ebi refresh" → saved as **PENDING**, "received 17 Nov 2026", "due 1 Dec 2026 · In 14 days", measurement **Version 1 · inches** linked, primary `Start work`. Then `/archived` → `2026 · 2` → Reopen → confirm → toast "Two-piece suit reopened" → archive drops to **1**, and after the next pass to "Nothing archived".
+- `npm run typecheck` clean · `npm test` 111/111 (was 104) · `npm run build:web` exports.
+
+**Remaining in P5:** edit project (screen 27 — prefilled, customer locked, soft delete) and the attachments grid (29 — camera/library, caption, delete). Then P6 templates + compare.
+
 #### 2026-11-16 (session 7) · P5 first slice — status machine, projects list, project detail
 
 **Shipped / verified**
@@ -872,7 +888,7 @@ Direction from the client: **keep the palette**, tighten the UI/UX against the s
 | P2 | Landing + auth (mock) | 4 | Landing, pricing, login, register, forgot/reset, verify — all navigable, no dead ends | ◐ landing + 4 auth screens ✅ · **no pricing block** · **no verify screen** (P11) |
 | P3 | Onboarding + dashboard | 4 | New user reaches a populated demo dashboard in <60s; skeleton/empty/populated states | ◐ onboarding + dashboard ✅ · empty/populated ✅ · **no skeleton loading states** |
 | P4 | Customers + measurements | 6 | Create/read/update/soft-delete customer; 18-field measurement entry; version history with persistence | ✅ **gate met 17 Nov 2026** — create · read · update · soft-delete + restore · 18-field entry · versioned history all verified in-browser. Open (not gate): 500-row perf unmeasured, standalone `[id]/measurements` route deferred to P6 |
-| P5 | Projects + status flow | 5 | Full status machine with confirmations; attachments; archive; overdue derivation | ◐ machine (12 tests) · filtered list · detail with every transition ✅ · **new/edit project, attachments, archived screen pending** |
+| P5 | Projects + status flow | 5 | Full status machine with confirmations; attachments; archive; overdue derivation | ◐ machine (6 moves, 12 tests) · filtered list · detail · **new job** · archive-by-year + reopen ✅ · **edit project + attachments pending** |
 | P6 | Templates + compare | 4 | Editor with reorder/rename/add/delete + validation; compare with deltas and revert | ⬜ not started |
 | P7 | Settings, paywall, referral UI | 4 | Subscription/expiry/referral/export/trash/danger screens with mock states | ⬜ not started |
 | P8 | Due engine + WhatsApp + notifications | 3 | Due list correct across time-travel; WhatsApp preview + deep link; local notification scheduled | ⬜ not started |

@@ -157,6 +157,19 @@ export default function ProjectsScreen() {
           })}
         </View>
       )}
+
+      {filter === 'archived' && rows.length > 0 ? (
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel="Browse archived jobs by year"
+          onPress={() => router.push('/archived' as never)}
+          style={styles.archiveLink}
+        >
+          <AppText variant="caption" weight="semiBold" color={colors.primary}>
+            Browse by year and reopen
+          </AppText>
+        </Pressable>
+      ) : null}
     </Screen>
   );
 }
@@ -180,4 +193,5 @@ const styles = StyleSheet.create({
   row: { flexDirection: 'row', alignItems: 'center', gap: spacing.md, minHeight: layout.rowHeight },
   rowCopy: { flex: 1, gap: spacing.xxs },
   meta: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: spacing.sm },
+  archiveLink: { minHeight: layout.touchTarget, alignItems: 'center', justifyContent: 'center' },
 });
