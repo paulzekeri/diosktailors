@@ -10,10 +10,10 @@
 >
 > | | |
 > |---|---|
-> | **Current phase** | **P4 · Customers + measurements** — ◐ foundations done, **screens not started** |
-> | **Built** | P0–P3 (caveats in §7.1) + P4 foundations (§7.0b) — nothing is signed off |
+> | **Current phase** | **P4 · Customers + measurements** — ◐ list · new · profile done; edit + measurement screens next |
+> | **Built** | P0–P3 (caveats in §7.1) + P4 foundations and screens 15/19/20 (§7.0b) — nothing is signed off |
 > | **Runs today** | `cd app && npm start` (Expo web + Expo Go). Mock data, 3 demo accounts |
-> | **Verified** | `npm run typecheck` clean · `npm test` 73/73 · `npm run build:web` exports |
+> | **Verified** | `npm run typecheck` clean · `npm test` 84/84 · `npm run build:web` exports |
 > | **Read next** | §7.1 (per-gate status) → §7.0b (session log + known gaps) → §7.2 P4 |
 >
 > **Rule:** status is ticked in §7.1 and logged in §7.0b **in the same commit that passes a gate**. A new session must be able to resume from this file alone — no memory, no chat history.
@@ -746,6 +746,19 @@ The client approved **every** deferral in `DIOKS_Tailors_MVP_Scope_Deferrals_and
 
 One entry per working session. Facts only: what shipped, what was verified, what the next session should pick up. **Updated in the same commit that changes a gate.**
 
+#### 2026-11-16 (session 3) · P4 screens 15, 19, 20 — customers list, new customer, profile
+
+**Shipped / verified**
+
+- **Customers list** (`(tabs)/customers.tsx`) rewritten on `SectionList` (virtualised for 500+ rows): sticky A–Z letter headers (`#` last, for names starting with a digit/symbol), 250 ms debounced search, 72px rows with avatar + name + local-format phone + "2 active jobs" badge, and all four states — skeleton list, error with retry, empty book, no-matches ("Add as a customer").
+- **New customer** (`(app)/customers/new.tsx`, `presentation: 'modal'`): name*, phone* with live `Saves as +234…` preview, WhatsApp, email, gender chips, birthday, anniversary, notes, photo (picked + compressed to 512px via `lib/image.ts`), duplicate-number warning (G-16) instead of a block, sticky save footer, zod validation on blur, then toast → profile.
+- **Customer profile** (`(app)/customers/[id].tsx`): identity, WhatsApp/Call deep links, `SegmentedTabs` (Measurements · Projects · Details) with counts, current version rendered **in template field order** and formatted by `lib/units.ts` (`32 1/2"`), version history, projects with `StatusPill`, details. Read-only: no action is shown before its route exists.
+- **Bug fixed in the mock repository:** `customers.list()` returned *every* customer for any text query — `phone.replace(/\D/g,'').includes('')` is always true. Extracted `src/lib/search.ts` (`matchesCustomerQuery`) with 5 tests; it also normalises local form (`0803…`) against stored E.164 (`+234803…`), and falls back to the WhatsApp number.
+- New pure modules + tests: `lib/search.ts`, `features/customers/list.ts` (sections, active-job counts, count/label copy), `features/projects/queries.ts`.
+- `npm run typecheck` clean · `npm test` 84/84 (was 73) · `npm run build:web` exports · five screenshots verified at 430×932 (list, no-results, new-customer form, profile measurements, profile projects).
+
+**Remaining in P4:** `[id]/edit` (prefilled form + soft delete via `ConfirmDialog` + restore from the deleted list), `[id]/measurements` (version list is already on the profile — needs its own screen when compare arrives in P6) and the **hero entry screen** `[id]/measurements/new` (grouped fields, fraction chips, ghost last-values, progress, unit toggle, sticky save, drafts). The profile shows no edit/measure actions until those routes exist.
+
 #### 2026-11-16 (session 2) · P4 foundations — units, schemas, data hooks, UI primitives
 
 **Shipped / verified**
@@ -793,7 +806,7 @@ One entry per working session. Facts only: what shipped, what was verified, what
 | P1 | Design system & shell | 3 | `theme.ts`, 24 shared components, `AppFrame`, component gallery route; 430px contract verified on 5 viewports | ◐ tokens · `AppFrame` · gallery ✅ · **11 of 24 components** · 430px verified at 360 / 430 / 1440 |
 | P2 | Landing + auth (mock) | 4 | Landing, pricing, login, register, forgot/reset, verify — all navigable, no dead ends | ◐ landing + 4 auth screens ✅ · **no pricing block** · **no verify screen** (P11) |
 | P3 | Onboarding + dashboard | 4 | New user reaches a populated demo dashboard in <60s; skeleton/empty/populated states | ◐ onboarding + dashboard ✅ · empty/populated ✅ · **no skeleton loading states** |
-| P4 | Customers + measurements | 6 | Create/read/update/soft-delete customer; 18-field measurement entry; version history with persistence | ◐ foundations done (units · zod schemas · data hooks · 6 UI primitives) · **no screens yet** |
+| P4 | Customers + measurements | 6 | Create/read/update/soft-delete customer; 18-field measurement entry; version history with persistence | ◐ screens 15 · 19 · 20 done (list, new, profile) · **edit + measurement entry next** |
 | P5 | Projects + status flow | 5 | Full status machine with confirmations; attachments; archive; overdue derivation | ⬜ not started |
 | P6 | Templates + compare | 4 | Editor with reorder/rename/add/delete + validation; compare with deltas and revert | ⬜ not started |
 | P7 | Settings, paywall, referral UI | 4 | Subscription/expiry/referral/export/trash/danger screens with mock states | ⬜ not started |

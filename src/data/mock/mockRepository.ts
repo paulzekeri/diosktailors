@@ -1,6 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { daysUntil, nextOccurrence, toISODate } from '@/lib/date';
+import { matchesCustomerQuery } from '@/lib/search';
 import { RepositoryError, type ProjectFilter, type Repository } from '../repository';
 import type {
   AuthSession,
@@ -314,16 +315,10 @@ export const mockRepository: Repository = {
       await hydrate();
       const businessId = requireBusinessId();
       const database = requireDb();
-      const term = query?.trim().toLowerCase() ?? '';
 
       return database.customers
         .filter((c) => c.businessId === businessId && !c.deletedAt)
-        .filter(
-          (c) =>
-            !term ||
-            c.fullName.toLowerCase().includes(term) ||
-            c.phoneE164.replace(/\D/g, '').includes(term.replace(/\D/g, '')),
-        )
+        .filter((c) => matchesCustomerQuery(c, query ?? ''))
         .sort((a, b) => a.fullName.localeCompare(b.fullName));
     },
 
