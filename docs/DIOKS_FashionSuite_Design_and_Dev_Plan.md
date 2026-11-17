@@ -10,11 +10,11 @@
 >
 > | | |
 > |---|---|
-> | **Current phase** | **P4 · Customers + measurements** — ◐ entry screen done; edit/soft-delete remaining |
-> | **Built** | P0–P3 (caveats in §7.1) + P4 foundations, screens 15/19/20 and the hero entry screen (§7.0b) |
+> | **Current phase** | **P4 ✅ complete (gate met 17 Nov 2026)** — next: **P5 · Projects + status flow** |
+> | **Built** | P0–P3 (caveats in §7.1) + P4 in full (§7.0b) — nothing is signed off yet |
 > | **Runs today** | `cd app && npm start` (Expo web + Expo Go). Mock data, 3 demo accounts |
-> | **Verified** | `npm run typecheck` clean · `npm test` 89/89 · `npm run build:web` exports |
-> | **Read next** | §7.1 (per-gate status) → §7.0b (session log + known gaps) → §7.2 P4 |
+> | **Verified** | `npm run typecheck` clean · `npm test` 92/92 · `npm run build:web` exports |
+> | **Read next** | §7.1 (per-gate status) → §7.0b (session log + known gaps) → §7.2 P5 |
 >
 > **Rule:** status is ticked in §7.1 and logged in §7.0b **in the same commit that passes a gate**. A new session must be able to resume from this file alone — no memory, no chat history.
 
@@ -746,6 +746,21 @@ The client approved **every** deferral in `DIOKS_Tailors_MVP_Scope_Deferrals_and
 
 One entry per working session. Facts only: what shipped, what was verified, what the next session should pick up. **Updated in the same commit that changes a gate.**
 
+#### 2026-11-16 (session 5) · P4 closed — edit, soft delete + restore; shared customer form
+
+**Shipped / verified**
+
+- **Extracted `features/customers/CustomerForm.tsx`** so "new" and "edit" share one implementation (fields, photo pick, duplicate warning, blur validation, sticky footer). `new.tsx` dropped from 305 → 47 lines.
+- **`[id]/edit`** (screen 21) — prefilled from the stored customer, save updates the profile only, and a danger zone with `Delete customer` behind a second `ConfirmDialog`.
+- **`[id]/deleted` + list footer link** — the restore half of the gate: `Recently deleted (n)` under the customers list, per-row `Restore`, empty state when there is nothing deleted.
+- **`toFormValues()`** — customer → form values in local phone form, round-trip tested against the schema (3 tests). Phones come back as `+234…` with no drift.
+- **Verified end-to-end in Chrome** (six screenshots): Edit → prefilled form → renamed to `Chidinma Eze-Obi` → `Save changes` → profile shows the new name → Edit → `Delete customer` → confirm sheet → back on the list at **5 customers** with `Recently deleted (1)` and the green toast → open the deleted list (name, phone, "deleted 17 Nov") → `Restore` → list empty again + `Chidinma restored` toast. Separately: `Add customer` → `Test Walk-in` → lands on a fresh profile with "Take measurements".
+- `npm run typecheck` clean · `npm test` 92/92 (was 89) · `npm run build:web` exports.
+
+**P4 gate: met.** Create · read · update · soft-delete + restore · 18-field entry with versions · history all proven in-browser. Still open, deliberately: 500-row scroll perf is unmeasured (SectionList virtualises, but no FlashList and no 500-row fixture), and the standalone `[id]/measurements` route moves to P6 where compare needs it.
+
+**Next session — start here: P5 · Projects + status flow** (§7.2): status machine `pending → in_progress → completed → delivered → archived` with rework (`completed → in_progress`) and archive only after delivered + confirmation; `Completed` and `Delivered` as separate actions with the §4.6 confirm + toast; project filters, new project (measurement linking, date pickers), project detail/edit, archive screen, attachments grid, overdue derivation. `useProjects`, `projectKeys`, `StatusPill`, `ConfirmDialog`, `Toast` and `Sheet` already exist; the pure status machine wants Vitest coverage before the UI.
+
 #### 2026-11-16 (session 4) · P4 hero screen — measurement entry (screen 23)
 
 **Shipped / verified**
@@ -820,7 +835,7 @@ One entry per working session. Facts only: what shipped, what was verified, what
 | P1 | Design system & shell | 3 | `theme.ts`, 24 shared components, `AppFrame`, component gallery route; 430px contract verified on 5 viewports | ◐ tokens · `AppFrame` · gallery ✅ · **11 of 24 components** · 430px verified at 360 / 430 / 1440 |
 | P2 | Landing + auth (mock) | 4 | Landing, pricing, login, register, forgot/reset, verify — all navigable, no dead ends | ◐ landing + 4 auth screens ✅ · **no pricing block** · **no verify screen** (P11) |
 | P3 | Onboarding + dashboard | 4 | New user reaches a populated demo dashboard in <60s; skeleton/empty/populated states | ◐ onboarding + dashboard ✅ · empty/populated ✅ · **no skeleton loading states** |
-| P4 | Customers + measurements | 6 | Create/read/update/soft-delete customer; 18-field measurement entry; version history with persistence | ◐ create · read · entry · history done · **update (edit) + soft delete remaining** |
+| P4 | Customers + measurements | 6 | Create/read/update/soft-delete customer; 18-field measurement entry; version history with persistence | ✅ **gate met 17 Nov 2026** — create · read · update · soft-delete + restore · 18-field entry · versioned history all verified in-browser. Open (not gate): 500-row perf unmeasured, standalone `[id]/measurements` route deferred to P6 |
 | P5 | Projects + status flow | 5 | Full status machine with confirmations; attachments; archive; overdue derivation | ⬜ not started |
 | P6 | Templates + compare | 4 | Editor with reorder/rename/add/delete + validation; compare with deltas and revert | ⬜ not started |
 | P7 | Settings, paywall, referral UI | 4 | Subscription/expiry/referral/export/trash/danger screens with mock states | ⬜ not started |
@@ -835,7 +850,7 @@ One entry per working session. Facts only: what shipped, what was verified, what
 | P15 | Export, retention, analytics, QA | 5 | Export + purge + events; full QA matrix; a11y & perf budgets met | ⬜ not started |
 | P16 | PWA release + store packaging + pilot | 5 | Live PWA on domain; EAS builds; store submissions; 3 pilot tailors onboarded | ⬜ not started |
 
-**Legend:** ✅ gate met and proven · ◐ built, gate has the listed gap · ⬜ not started. **No phase is `✅` yet** — P0–P3 are functionally built and the gaps above are the remainder. Update this table and §7.0b in the same commit that closes a gap.
+**Legend:** ✅ gate met and proven · ◐ built, gate has the listed gap · ⬜ not started. **P4 is the first phase at `✅`** — its three gate items were each exercised in a browser (§7.0b). P0–P3 remain `◐` with the gaps listed above. Update this table and §7.0b in the same commit that closes a gap.
 
 **Total:** ≈ **70 working days** to pilot (~14 weeks at 5 days/week, plus review buffer), **73** if the optional referral-credit phase (P13B) is funded. Of that, **P0–P9 = 38 working days (~7.5 weeks)** is the mock front end you want to see and approve first; backend, payments, QA and release are the remaining 32.
 

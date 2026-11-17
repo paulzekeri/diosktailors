@@ -21,7 +21,7 @@ On a real phone: `npm start`, then scan the QR code (same Wi-Fi).
 
 ## What exists today (P0–P3, mock data)
 
-Phase status, gate caveats and the next task live in `docs/DIOKS_FashionSuite_Design_and_Dev_Plan.md` (§7.1 + §7.0b). Summary: **P4 in progress — list, new customer, profile and the measurement entry screen are built; edit + soft delete are next.**
+Phase status, gate caveats and the next task live in `docs/DIOKS_FashionSuite_Design_and_Dev_Plan.md` (§7.1 + §7.0b). Summary: **P4 ✅ complete (gate met)** — customers CRUD + soft delete/restore, measurements with versions and drafts. Next: **P5 · Projects + status flow**.
 
 | Area | State |
 |---|---|

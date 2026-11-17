@@ -1,6 +1,6 @@
 import { useRouter } from 'expo-router';
 import { useMemo, useState } from 'react';
-import { SectionList, StyleSheet, View } from 'react-native';
+import { Pressable, SectionList, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { AppText } from '@/components/ui/AppText';
@@ -14,7 +14,7 @@ import { Wash } from '@/components/ui/Wash';
 import { CustomersIcon } from '@/components/ui/icons';
 import { repositoryErrorCopy, toRepositoryError, type Customer } from '@/data';
 import { activeJobCounts, activeJobLabel, customerCountLabel, sectionByInitial } from '@/features/customers/list';
-import { useCustomers } from '@/features/customers/queries';
+import { useCustomers, useDeletedCustomers } from '@/features/customers/queries';
 import { useProjects } from '@/features/projects/queries';
 import { formatPhoneDisplay } from '@/lib/phone';
 import { useDebouncedValue } from '@/lib/useDebouncedValue';
@@ -33,6 +33,7 @@ export default function CustomersScreen() {
 
   const customers = useCustomers(debouncedTerm);
   const projects = useProjects('all');
+  const deleted = useDeletedCustomers();
 
   const counts = useMemo(() => activeJobCounts(projects.data ?? []), [projects.data]);
   const sections = useMemo(() => sectionByInitial(customers.data ?? []), [customers.data]);
@@ -103,11 +104,25 @@ export default function CustomersScreen() {
         ListHeaderComponent={header}
         ListEmptyComponent={<View style={styles.empty}>{empty}</View>}
         ListFooterComponent={
-          customers.isRefetching && !customers.isLoading ? (
-            <AppText variant="caption" color={colors.inkSubtle} center style={styles.refreshing}>
-              Updating…
-            </AppText>
-          ) : undefined
+          <View style={styles.footer}>
+            {customers.isRefetching && !customers.isLoading ? (
+              <AppText variant="caption" color={colors.inkSubtle} center>
+                Updating…
+              </AppText>
+            ) : null}
+            {(deleted.data?.length ?? 0) > 0 ? (
+              <Pressable
+                accessibilityRole="button"
+                accessibilityLabel={`Recently deleted, ${deleted.data?.length}`}
+                onPress={() => router.push('/customers/deleted' as never)}
+                style={styles.deletedLink}
+              >
+                <AppText variant="caption" weight="semiBold" color={colors.inkMuted}>
+                  Recently deleted ({deleted.data?.length})
+                </AppText>
+              </Pressable>
+            ) : null}
+          </View>
         }
         renderSectionHeader={({ section }) => (
           <View style={styles.sectionHeader}>
@@ -186,5 +201,6 @@ const styles = StyleSheet.create({
   },
   separator: { height: spacing.sm },
   empty: { paddingTop: spacing.xl },
-  refreshing: { paddingTop: spacing.lg },
+  footer: { paddingTop: spacing.lg, gap: spacing.md, alignItems: 'center' },
+  deletedLink: { minHeight: layout.touchTarget, justifyContent: 'center' },
 });

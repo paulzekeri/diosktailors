@@ -79,17 +79,30 @@ export default function CustomerProfileScreen() {
         ]}
         showsVerticalScrollIndicator={false}
       >
-        <Pressable
-          accessibilityRole="button"
-          accessibilityLabel="Back to customers"
-          onPress={() => router.back()}
-          hitSlop={10}
-          style={styles.back}
-        >
-          <AppText variant="label" weight="semiBold" color={colors.primary}>
-            ← Customers
-          </AppText>
-        </Pressable>
+        <View style={styles.topBar}>
+          <Pressable
+            accessibilityRole="button"
+            accessibilityLabel="Back to customers"
+            onPress={() => router.back()}
+            hitSlop={10}
+            style={styles.back}
+          >
+            <AppText variant="label" weight="semiBold" color={colors.primary}>
+              ← Customers
+            </AppText>
+          </Pressable>
+          <Pressable
+            accessibilityRole="button"
+            accessibilityLabel={`Edit ${customer.data?.fullName ?? 'customer'}`}
+            onPress={() => router.push(`/customers/${id}/edit` as never)}
+            hitSlop={10}
+            style={styles.back}
+          >
+            <AppText variant="label" weight="semiBold" color={colors.primary}>
+              Edit
+            </AppText>
+          </Pressable>
+        </View>
 
         {customer.isLoading ? (
           <View style={styles.loading}>
@@ -270,6 +283,7 @@ export default function CustomerProfileScreen() {
 const styles = StyleSheet.create({
   page: { flex: 1, backgroundColor: colors.canvas },
   content: { paddingHorizontal: layout.gutter, gap: spacing.lg },
+  topBar: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
   back: { minHeight: layout.touchTarget, justifyContent: 'center', alignSelf: 'flex-start' },
   loading: { gap: spacing.lg, alignItems: 'center', paddingTop: spacing.xl },
   identity: { flexDirection: 'row', alignItems: 'center', gap: spacing.lg },

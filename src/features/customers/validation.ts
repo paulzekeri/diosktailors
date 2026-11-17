@@ -7,7 +7,7 @@ import { z } from 'zod';
 import type { Customer, NewCustomer } from '@/data/types';
 import { todayISO } from '@/lib/date';
 import { zodFieldErrors, type FieldErrors } from '@/lib/forms';
-import { toE164 } from '@/lib/phone';
+import { formatPhoneDisplay, toE164 } from '@/lib/phone';
 
 const NAME_MAX = 80;
 const NOTES_MAX = 500;
@@ -108,4 +108,25 @@ export function findDuplicatePhone(customers: Customer[], input: string): Custom
   const target = toE164(input);
   if (!target) return undefined;
   return customers.find((customer) => toE164(customer.phoneE164) === target);
+}
+
+/**
+ * Prefills the edit form from a stored customer. Phones are shown in local form
+ * (`0803 123 4567`) because that is what the tailor typed; the schema normalises
+ * them back to E.164 on save.
+ */
+export function toFormValues(customer: Customer): CustomerFormValues {
+  return {
+    ...EMPTY_CUSTOMER_FORM,
+    fullName: customer.fullName,
+    phone: formatPhoneDisplay(customer.phoneE164),
+    whatsapp: customer.whatsappE164 ? formatPhoneDisplay(customer.whatsappE164) : '',
+    email: customer.email ?? '',
+    gender: customer.gender,
+    birthday: customer.birthday ?? '',
+    anniversary: customer.anniversary ?? '',
+    photoUrl: customer.photoUrl ?? '',
+    notes: customer.notes ?? '',
+    measureNext: false,
+  };
 }

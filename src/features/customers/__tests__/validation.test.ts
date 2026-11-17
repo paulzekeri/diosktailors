@@ -5,6 +5,7 @@ import { addDaysISO } from '@/lib/date';
 import {
   EMPTY_CUSTOMER_FORM,
   findDuplicatePhone,
+  toFormValues,
   toNewCustomer,
   validateCustomerForm,
   type CustomerFormValues,
@@ -95,6 +96,52 @@ describe('toNewCustomer', () => {
   it('refuses to build a customer from an unvalidated phone', () => {
     const data = expectValid(validForm);
     expect(() => toNewCustomer({ ...data, phone: 'nope' })).toThrow(/validated form/);
+  });
+});
+
+describe('toFormValues (edit prefill)', () => {
+  const stored = {
+    id: 'cus_1',
+    businessId: 'biz_1',
+    fullName: 'Adaeze Okafor',
+    phoneE164: '+2348031234567',
+    whatsappE164: '+2348031234568',
+    email: 'adaeze@example.com',
+    gender: 'female',
+    birthday: '1990-05-01',
+    notes: 'Prefers fitted sleeves.',
+    createdAt: '2026-01-01T00:00:00.000Z',
+    updatedAt: '2026-01-01T00:00:00.000Z',
+  } as Customer;
+
+  it('shows phones in local form so the tailor recognises them', () => {
+    const values = toFormValues(stored);
+    expect(values.phone).toBe('0803 123 4567');
+    expect(values.whatsapp).toBe('0803 123 4568');
+  });
+
+  it('round-trips through the schema back to E.164 without drift', () => {
+    const values = toFormValues(stored);
+    const result = validateCustomerForm(values);
+    if (!result.success) throw new Error(JSON.stringify(result.errors));
+
+    const input = toNewCustomer(result.data);
+    expect(input.phoneE164).toBe(stored.phoneE164);
+    expect(input.whatsappE164).toBe(stored.whatsappE164);
+    expect(input.fullName).toBe(stored.fullName);
+    expect(input.email).toBe(stored.email);
+    expect(input.gender).toBe('female');
+    expect(input.birthday).toBe(stored.birthday);
+    expect(input.notes).toBe(stored.notes);
+  });
+
+  it('fills blanks for everything optional and never re-arms "measure next"', () => {
+    const values = toFormValues({ ...stored, whatsappE164: undefined, email: undefined, birthday: undefined } as Customer);
+    expect(values.whatsapp).toBe('');
+    expect(values.email).toBe('');
+    expect(values.birthday).toBe('');
+    expect(values.notes).toBe('Prefers fitted sleeves.');
+    expect(values.measureNext).toBe(false);
   });
 });
 
